@@ -1,9 +1,10 @@
 import LoginForm from './LoginForm';
-import Dashboard from './Dashboard';
+import Dashboard from './Dashboard/Dashboard';
 import React from 'react';
+import Navbar from './Navbar';
+
 
 const Home = () => {
-
     const [isLogged, setIsLogged] = React.useState(false);
 
     const handleLogin = (e) => {
@@ -11,8 +12,12 @@ const Home = () => {
         console.log('Logged in');
         setIsLogged(true);
     }
-
-    return isLogged ? <Dashboard /> : <LoginForm submited={handleLogin}/>;
+    return (
+        <>
+            {/* WHY THE NAVBAR IS SHOWN IN THE DASHBOARD */}
+            {isLogged ? <Dashboard /> : <LoginForm submited={handleLogin}/>}
+        </>
+    )
 
 };
 

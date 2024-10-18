@@ -1,9 +1,11 @@
 import '../Styles/Login.css';
+import Navbar from './Navbar';
 
 const LoginForm = (props) => {
 
     return (
         <div> {/* remove the div */}
+        <Navbar />
         <h1>Login form</h1>
         <form onSubmit={props.submited}>
             <div>

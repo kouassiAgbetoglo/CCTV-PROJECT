@@ -1,6 +1,9 @@
+import Navbar from './Navbar';
+
 const About = () => {
     return (
         <div>
+            <Navbar />
             <h1>À propos</h1>
                 <p>
                 Je suis un passionné de technologie qui lance un projet de surveillance vidéo. Mon objectif est de proposer des solutions complètes, tout en apprenant et en me perfectionnant dans ce domaine pour devenir un spécialiste.
