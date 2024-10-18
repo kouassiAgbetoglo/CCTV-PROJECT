@@ -1,24 +1,28 @@
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+
 import './App.css';
-import Home from './Components/Home'
-import About from './Components/About';
-import Contact from './Components/Contact';
-import {Routes, Route, Link} from 'react-router-dom';
+import Navbar from './Components/Navbar'
 
 function App() {
-  return (
-    <div className="App">
-      <nav>
-        <Link to="/" element={<Home />}>Accueil</Link>
-        <Link to="/about" element={<About />}>À propos</Link>
-        <Link to="/contact" element={<Contact />}>Contact</Link>
-      </nav>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
 
-    </div>
+  const [hideNavbar, setHideNavbar] = React.useState(false);
+  let currentPath = useLocation().pathname; // Get current path 
+  const validPaths = ['/', '/about', '/contact'];
+  let isValidPath = !validPaths.includes(currentPath);
+  
+  console.log(isValidPath)
+
+  React.useEffect(() => {
+    setHideNavbar(isValidPath);
+  }, [currentPath]);
+  
+  
+
+  return (
+    <>
+      {!hideNavbar && <Navbar />}
+    </>
   );
 }
 
