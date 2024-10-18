@@ -1,5 +1,4 @@
 const About = () => {
-    const sectionFontSize = "1";
     return (
         <div>
             <h1>À propos</h1>

@@ -1,20 +1,11 @@
 import '../Styles/Login.css';
-import Dashbord from './Dashboard';
-import React from 'react';
 
-const Login = () => {
-
-   const [isLogged, setIsLogged] = React.useState(false);
-
-    function submited(e) {
-        e.preventDefault();
-        console.log('SUBMITTED');
-        setIsLogged(true);
-        console.log(isLogged);
-    }
+const LoginForm = (props) => {
 
     return (
-        <form onSubmit={submited}>
+        <div> {/* remove the div */}
+        <h1>Login form</h1>
+        <form onSubmit={props.submited}>
             <div>
                 <label>
                     <input type="text" name="username" placeholder='Identifiant'/>
@@ -29,7 +20,8 @@ const Login = () => {
                 <input className='submit' type="submit" value="Connexion" />
             </div>
         </form>
+        </div>
     )
 };
 
-export default Login;
+export default LoginForm;
