@@ -1,8 +1,6 @@
 import LoginForm from '../Components/Authentication/LoginForm';
 import Dashboard from '../Components/Dashboard/Dashboard';
 import React from 'react';
-import Navbar from '../Components/Navbar';
-
 
 const Home = () => {
     

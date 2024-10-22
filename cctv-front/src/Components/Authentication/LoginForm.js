@@ -67,6 +67,7 @@ const LoginForm = (props) => {
                         {/*UTILISER LE FORMGROUP DE MATERIAL UI*/}
                         <Box
                             component="form"
+                            onSubmit={props.submited}
                             sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
                             noValidate
                             autoComplete="off"
@@ -78,7 +79,7 @@ const LoginForm = (props) => {
                                 <TextField label="Mot de passe" id="outlined-size-normal" defaultValue="" />
                             </div>
                             <div className='center'>
-                                <Button variant="contained" color="ochre">Connexion</Button>
+                                <Button variant="contained" type="submit" color="ochre">Connexion</Button>
                             </div>
                         </Box>
                 </ThemeProvider>
