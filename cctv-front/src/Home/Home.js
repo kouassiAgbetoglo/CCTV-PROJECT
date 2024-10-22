@@ -1,12 +1,12 @@
-import LoginForm from './LoginForm';
-import Dashboard from './Dashboard/Dashboard';
+import LoginForm from '../Components/Authentication/LoginForm';
+import Dashboard from '../Components/Dashboard/Dashboard';
 import React from 'react';
-import Navbar from './Navbar';
+import Navbar from '../Components/Navbar';
 
 
 const Home = () => {
+    
     const [isLogged, setIsLogged] = React.useState(false);
-
     const handleLogin = (e) => {
         e.preventDefault(); // Prevent from submitting form when page is loaded
         console.log('Logged in');

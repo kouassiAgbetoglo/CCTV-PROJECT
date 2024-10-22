@@ -1,8 +1,7 @@
-import '../Styles/Login.css';
-import Navbar from './Navbar';
+import '../../Styles/Login.css';
+import Navbar from '../Navbar';
 
 const LoginForm = (props) => {
-
     return (
         <div> {/* remove the div */}
         <Navbar />

@@ -1,14 +1,13 @@
 form {
+    padding: 0.2%;
     max-width: fit-content;
     margin-inline: auto;
-  }
-
-form {
-    background: rgb(221, 224, 222);
-    padding: 0.2%;
 }
 
 .center {
     text-align: center;
 }
 
+* {
+  box-sizing: border-box;
+}
