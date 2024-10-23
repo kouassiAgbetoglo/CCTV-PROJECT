@@ -1,6 +1,14 @@
-* {
+body {
+  background-color: rgba(94, 93, 93, 0.961);
   margin: 0;
-  padding: 0;
+  padding: 5px;
+}
+
+
+* {
+  max-width: 1800px;
+  width: auto;
+  
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }

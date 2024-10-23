@@ -29,7 +29,7 @@ const styles = {
     },
 
     leftSide: {
-        backgroundColor: 'rgba(10, 10, 10, 0.5)',
+        // backgroundColor: 'rgba(10, 10, 10, 0.5)',
         border: '1 px solid #fff',
         padding: '0.5rem',
         flexGrow: '1',
@@ -38,16 +38,12 @@ const styles = {
 
     rightSide: {
         display: 'flex',
-        backgroundColor: 'rgba(10, 10, 10, 0.5)',
+        // backgroundColor: 'rgba(10, 10, 10, 0.5)',
         border: '1 px solid #fff',
         flexGrow: '1',
         color: '#fff',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-
-    innerDiv: {
-        borderStyle: 'dotted',        
     },
 };
 
@@ -61,7 +57,7 @@ const LoginForm = (props) => {
                 <img src={cctv} alt='cctv-logo' style={{width: '100%', height: '100', objectFit: 'contain'}}/>
             </div>
             <div className='rightSide' style={styles.rightSide}>
-                <div className='innerDiv' style={styles.innerDiv}>
+                <div>
                     <h1 style={{textAlign: 'center', color: 'black'}}>CCTV</h1> {/*Mettre le nom du projet ou du site*/}
                     <ThemeProvider theme={theme}>  
                         {/*UTILISER LE FORMGROUP DE MATERIAL UI*/}
@@ -73,19 +69,19 @@ const LoginForm = (props) => {
                             autoComplete="off"
                         >
                             <div>
-                                <TextField label="Identifiant" id="outlined-size-normal" defaultValue=""/>
+                                <TextField label="Identifiant" id="username" defaultValue="" required="required"/>
                             </div>
                             <div>
-                                <TextField label="Mot de passe" id="outlined-size-normal" defaultValue="" />
+                                <TextField label="Mot de passe" id="password" defaultValue="" required="required"/>
                             </div>
                             <div className='center'>
-                                <Button variant="contained" type="submit" color="ochre">Connexion</Button>
+                                <Button variant="contained" type="submit" style={{backgroundColor: "rgba(94, 93, 93, 0.961)", color: "black"}}>Connexion</Button>
                             </div>
                         </Box>
-                </ThemeProvider>
-                <div style={{textAlign: 'center', color: 'black'}}>
-                    <Link to='/resetPW' style={{textAlign: 'center', color: 'black'}}>Mot de passe oublié?</Link>
-                </div>
+                    </ThemeProvider>
+                    <div style={{textAlign: 'center', color: 'black'}}>
+                        <Link to='/resetPW' style={{textAlign: 'center', color: 'black'}}>Mot de passe oublié?</Link>
+                    </div>
                 </div>
             </div>
         </div>
