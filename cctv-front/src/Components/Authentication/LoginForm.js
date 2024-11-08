@@ -3,20 +3,8 @@ import Navbar from '../Navbar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import cctv from '../../Assests/cctv.png';
 import { Link } from 'react-router-dom';
-
-const theme = createTheme({
-  palette: {
-    ochre: {
-      main: '#E3D026',
-      light: '#E9DB5D',
-      dark: '#A29415',
-      contrastText: '#242105',
-    },
-  },
-});
 
 const styles = {
 
@@ -59,26 +47,24 @@ const LoginForm = (props) => {
             <div className='rightSide' style={styles.rightSide}>
                 <div>
                     <h1 style={{textAlign: 'center', color: 'black'}}>CCTV</h1> {/*Mettre le nom du projet ou du site*/}
-                    <ThemeProvider theme={theme}>  
                         {/*UTILISER LE FORMGROUP DE MATERIAL UI*/}
-                        <Box
-                            component="form"
-                            onSubmit={props.submited}
-                            sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
-                            noValidate
-                            autoComplete="off"
-                        >
-                            <div>
-                                <TextField label="Identifiant" id="username" defaultValue="" required="required"/>
-                            </div>
-                            <div>
-                                <TextField label="Mot de passe" id="password" defaultValue="" required="required"/>
-                            </div>
-                            <div className='center'>
-                                <Button variant="contained" type="submit" style={{backgroundColor: "rgba(94, 93, 93, 0.961)", color: "black"}}>Connexion</Button>
-                            </div>
-                        </Box>
-                    </ThemeProvider>
+                    <Box
+                        component="form"
+                        onSubmit={props.submited}
+                        sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+                        noValidate
+                        autoComplete="off"
+                    >
+                        <div>
+                            <TextField label="Identifiant" id="username" defaultValue="" required="required"/>
+                        </div>
+                        <div>
+                            <TextField label="Mot de passe" id="password" defaultValue="" required="required"/>
+                        </div>
+                        <div className='center'>
+                            <Button variant="contained" type="submit" style={{backgroundColor: "rgba(94, 93, 93, 0.961)", color: "black"}}>Connexion</Button>
+                        </div>
+                    </Box>
                     <div style={{textAlign: 'center', color: 'black'}}>
                         <Link to='/resetPW' style={{textAlign: 'center', color: 'black'}}>Mot de passe oublié?</Link>
                     </div>

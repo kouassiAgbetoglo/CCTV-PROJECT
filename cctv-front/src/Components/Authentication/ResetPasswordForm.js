@@ -1,57 +1,54 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
-const theme = createTheme({
-    palette: {
-      ochre: {
-        main: '#E3D026',
-        light: '#E9DB5D',
-        dark: '#A29415',
-        contrastText: '#242105',
-      },
-    },
-  });
 
-  const styles = {
 
+const styles = {
     innerDiv: {
-        display: 'flex',
-        backgroundColor: 'rgba(10, 10, 10, 0.5)',
-        border: '1 px solid #fff',
-        flexGrow: '1',
-        color: '#fff', 
-        borderStyle: 'dotted',    
-        alignItems: 'center',  
+        width: '50%',
+        margin: '0 auto 0 auto',
+    },
+
+    s1: {
+        marin: '100px',
+        textAlign: 'center',
+        margin: '20% auto 0 auto',
+    },
+
+    centerResetPage: {
+        textAlign: 'center',
+        width: '100%',
+        marginBottom: '16px',
     },
 };
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm = (props) => {
     return (
         <>
         <div className='innerDiv' style={styles.innerDiv}>
-                <h1 style={{textAlign: 'center', color: 'black'}}>CCTV</h1>
-
-            <ThemeProvider theme={theme}> 
-                <Box
-                    component="form"
-                    sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <div>
+            <h1 style={styles.s1}>Mot de passe oublié?</h1>
+            <p>
+                Entrez votre adresse e-mail ou nom d'utilisateur associé à votre compte, afin de recevoir les instructions pour réinitialiser votre mot de passe.
+            </p>
+            <Box
+                component="form"
+                onSubmit={props.submited}
+                // sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+                noValidate
+                autoComplete="off"
+            >       
+                    <div style={{margin: '16px 0 16px 0'}}>
                         <TextField label="Adresse email" id="outlined-size-normal" defaultValue=""/>
                     </div>
-                    <div className='center'>
-                        <Button variant="contained" color="ochre">Réinitialiser</Button>
-                        <Button variant="contained" color="ochre">
-                            <Link to='/'>Retour à l'accueil</Link>
-                        </Button>
+                    <div className='centerResetPage' style={styles.centerResetPage}>
+                        <Button variant="contained" color="ochre" style={{width: '100%'}}>Réinitialiser</Button>
                     </div>
-                </Box>
-            </ThemeProvider>
+                    <div className='centerResetPage' style={styles.centerResetPage}>
+                            <Link to='/' style={{color: 'black'}}>Retour à l'accueil</Link>
+                    </div>
+            </Box>
         </div>
         </>
     )
