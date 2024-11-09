@@ -58,10 +58,10 @@ const LoginForm = (props) => {
                         autoComplete="off"
                     >
                         <div>
-                            <TextField label="Identifiant" id="username" defaultValue="" required="required"/>
+                            <TextField label="Identifiant" id="username" defaultValue="" required/>
                         </div>
                         <div>
-                            <TextField label="Mot de passe" id="password" defaultValue="" required="required"/>
+                            <TextField label="Mot de passe" id="password" defaultValue="" required/>
                         </div>
                         <div className='center'>
                             <Button variant="contained" type="submit" style={{backgroundColor: "rgba(94, 93, 93, 0.961)", color: "black"}}>Connexion</Button>

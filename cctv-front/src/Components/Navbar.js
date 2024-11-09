@@ -47,7 +47,7 @@ const Navbar = () => {
                          style={styles.navBar}
                         >
                                 {navItems.map((item) => (
-                                        <BottomNavigationAction label={item.label} value={item.value} style={styles.navBarContent}/>
+                                        <BottomNavigationAction key= {item.value} label={item.label} value={item.value} style={styles.navBarContent}/>
                                 ))}
                         </BottomNavigation>
                         </Box>
