@@ -40,10 +40,10 @@ const ResetPasswordForm = (props) => {
                 autoComplete="off"
             >       
                     <div style={{margin: '16px 0 16px 0'}}>
-                        <TextField label="Adresse email" id="outlined-size-normal" defaultValue=""/>
+                        <TextField label="Adresse email" id="email" defaultValue="" required/>
                     </div>
                     <div className='centerResetPage' style={styles.centerResetPage}>
-                        <Button variant="contained" color="ochre" style={{width: '100%'}}>Réinitialiser</Button>
+                        <Button variant="contained" type="submit" color="ochre" style={{width: '100%'}}>Réinitialiser</Button>
                     </div>
                     <div className='centerResetPage' style={styles.centerResetPage}>
                             <Link to='/' style={{color: 'black'}}>Retour à l'accueil</Link>

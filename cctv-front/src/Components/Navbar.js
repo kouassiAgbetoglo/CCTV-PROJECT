@@ -52,11 +52,6 @@ const Navbar = () => {
                         </BottomNavigation>
                         </Box>
                 </>
-                // <nav>
-                //     <Link to='/'>Accueil</Link>
-                //     <Link to='/about'>À propos</Link>
-                //     <Link to='/contact'>Contact</Link>
-                // </nav>
         )
 }
 
