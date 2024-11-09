@@ -46,17 +46,18 @@ const ContactForm = (props) => {
                 autoComplete="off"
             >
                 <div className='row' style={styles.row}>
-                    <TextField label="Nom" id="lastName" defaultValue="" fullWidth sx={styles.textField}/>
-                    <TextField label="Prénom" id="firstName" defaultValue=""  fullWidth />
+                    <TextField label="Nom" id="lastName" defaultValue="" required fullWidth sx={styles.textField}/>
+                    <TextField label="Prénom" id="firstName" defaultValue="" required fullWidth />
                 </div>
                 <div>
-                    <TextField label="E-mail" id="mail" defaultValue="" fullWidth sx={styles.textField}/>
+                    <TextField label="E-mail" id="email" defaultValue="" required="true" fullWidth sx={styles.textField}/>
+                
                 </div>
                 <div>
-                    <TextField label="Sujet du message" id="messageSubject" defaultValue="" fullWidth sx={styles.textField}/>
+                    <TextField label="Sujet du message" id="messageSubject" defaultValue="" required fullWidth sx={styles.textField}/>
                 </div>
                 <div className='messageContainer' style={styles.messageContainer}>
-                    <TextField label="Message" id="message" defaultValue="" multiline rows={8} style={{width: '100%'}}/>
+                    <TextField label="Message" id="message" defaultValue="" required multiline rows={8} style={{width: '100%'}}/>
                 </div>
                 <div style={{ marginBottom: '16px', textAlign: 'center'}}>
                     <Button variant="contained" type="submit" style={{backgroundColor: "rgba(94, 93, 93, 0.961)", color: "black"}}>Envoyer</Button>

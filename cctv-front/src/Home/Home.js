@@ -1,9 +1,9 @@
 import LoginForm from '../Components/Authentication/LoginForm';
-import Dashboard from '../Components/Dashboard/Dashboard';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-    const [isLogged, setIsLogged] = React.useState(false);
+    const navigate = useNavigate(); // Import useNavigate
     const handleLogin = (event) => {
         event.preventDefault(); // Prevent from submitting form when page is loaded
         let {username, password} = event.target.elements;
@@ -19,17 +19,14 @@ const Home = () => {
         };
 
         if (checkUser(username, password)) { 
-            // console.log('logged in')
-            setIsLogged(true);
+            navigate('/dashboard', {replace: true}); // Redirect to dashboard when logged in
         };
 
     }
 
     return (
         <>
-            
-            {/* WHY THE NAVBAR IS SHOWN IN THE DASHBOARD */}
-            {isLogged ? <Dashboard /> : <LoginForm submited={handleLogin}/>}
+            <LoginForm submited={handleLogin}/>
         </>
     )
 

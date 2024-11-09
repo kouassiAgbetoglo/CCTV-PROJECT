@@ -1,7 +1,7 @@
 import Navbar from '../Components/Navbar';
 import ContactForm from '../Components/Contact/ContactForm';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
+import validator from 'validator';
+import { useNavigate } from 'react-router-dom';
 
 const styles = {
 
@@ -27,13 +27,32 @@ const styles = {
 }
 
 const Contact = () => {
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
-
-    const submitContactForm  = (event) => {
+    const handleContact  = (event) => {
         event.preventDefault();
-        console.log('submit')
-        navigate('/', { replace: true })
+
+        let {lastName, firstName, email, messageSubject, message} = event.target.elements; // Retrieve data from form elements
+
+        lastName = lastName.value; // Retrieve name from form element
+        firstName = firstName.value;
+        email = email.value;
+        messageSubject = messageSubject.value;
+        message = message.value;
+
+        // Check if form has an empty field
+        if (!lastName ||!firstName ||!email ||!messageSubject ||!message) {
+            console.log('Form empty field')
+            return;
+        }
+        
+        // Check if email is valid with validator rules
+        if (!validator.isEmail(email)) {
+            return;
+        } else {
+            navigate("/", { replace: true }); // redirect to home page and can't go back to this page
+        }
+
     }
 
     return (
@@ -43,7 +62,7 @@ const Contact = () => {
                     <h1 className='h1' style={styles.h1}>Me contacter</h1>
                     <p className='p1' style={styles.p1}>Une question ? N'hésite pas à me contacter.</p>
                     <div className='contactContainer' style={styles.contactContainer}>
-                        <ContactForm submited={submitContactForm}/>
+                        <ContactForm submited={handleContact}/>
                     </div>
                 </div>
         </>
