@@ -3,7 +3,7 @@ import Navbar from '../Navbar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import cctv from '../../Assests/cctv.png';
+import drone from '../../Assests/drone.JPG';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -14,6 +14,8 @@ const styles = {
         gap: '10px',
         padding: '10px',
         gridAutoColumn: '50px',
+        width: '75%',
+        margin: '0 auto 0 auto',
     },
 
     leftSide: {
@@ -42,11 +44,11 @@ const LoginForm = (props) => {
         <Navbar />
         <div className='gridContainer' style={styles.gridContainer}>
             <div className='leftSide' style={styles.leftSide}>
-                <img src={cctv} alt='cctv-logo' style={{width: '100%', height: '100', objectFit: 'contain'}}/>
+                <img src={drone} alt='drone-logo' style={{width: '100%', height: '100%', objectFit: 'contain'}}/>
             </div>
             <div className='rightSide' style={styles.rightSide}>
                 <div>
-                    <h1 style={{textAlign: 'center', color: 'black'}}>CCTV</h1> {/*Mettre le nom du projet ou du site*/}
+                    <h1 style={{textAlign: 'center', color: 'black'}}>DroneViewer</h1> {/*Mettre le nom du projet ou du site*/}
                         {/*UTILISER LE FORMGROUP DE MATERIAL UI*/}
                     <Box
                         component="form"
