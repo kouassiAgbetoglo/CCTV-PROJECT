@@ -50,7 +50,7 @@ const ContactForm = (props) => {
                     <TextField label="Prénom" id="firstName" defaultValue="" required fullWidth />
                 </div>
                 <div>
-                    <TextField label="E-mail" id="email" defaultValue="" required="true" fullWidth sx={styles.textField}/>
+                    <TextField label="E-mail" id="email" defaultValue="" required fullWidth sx={styles.textField}/>
                 
                 </div>
                 <div>
