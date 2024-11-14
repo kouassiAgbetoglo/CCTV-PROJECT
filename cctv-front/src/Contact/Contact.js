@@ -49,9 +49,10 @@ const Contact = () => {
         // Check if email is valid with validator rules
         if (!validator.isEmail(email)) {
             return;
-        } else {
-            navigate("/", { replace: true }); // redirect to home page and can't go back to this page
         }
+           
+        navigate("/", { replace: true }); // redirect to home page and can't go back to this page
+        
 
     }
 

@@ -9,7 +9,6 @@ const ResetPw = () => {
 
     const handlePwReset = (event) => {
         event.preventDefault(); // Prevent from submitting form when page is loaded
-        console.log('PW reset submitted');
         let { email } = event.target.elements;
         email = email.value;
 
@@ -19,7 +18,6 @@ const ResetPw = () => {
 
         // check if email is valid
         if (!validator.isEmail(email)) {
-            console.log('Email is not valid', validator.isEmail(email))
             return;
         }
 
