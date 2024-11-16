@@ -1,59 +1,25 @@
 import VideoCapture from '../Components/Dashboard/VideoCapture';
 import Logout from '../Components/Dashboard/Logout'
-import UserSettings from '../Components/Dashboard/UserSettings';
-import Pose from '../Components/Dashboard/Pose'
-import Battery from '../Components/Dashboard/Battery';
-import FlightTime from '../Components/Dashboard/FlightTime';
 
 const styles = {
 
     gridContainer: {
+        display: 'grid',
+        gridTemplateColumns: 'auto auto auto auto',
         width: '75%',
         margin: '0 auto 0 auto',
+        border: '2px solid black',
+        padding: '10px 10px 10px 10px',
     },
 
     videoContainer: {
         border: '1px solid black',
-        marginTop: '10px',
-        width: '90%',
-        height: '480px'
+        gridColumn: '1/5',
     },
 
     logoutContainer: {
-        border: '1px solid black',
-        marginTop: '10px',
-        width: '60px',
-        height: '60px',
-    },
-
-    userSettingsContainer: {
-        border: '1px solid black',
-        marginTop: '10px',
-        width: '60px',
-        height: '60px',
-    },
-
-    poseContainer: {
-        border: '1px solid black',
-        marginTop: '10px',
-        width: '60px',
-        height: '60px',
-    },
-
-    batteryContainer: {
-        border: '1px solid black',
-        marginTop: '10px',
-        width: '60px',
-        height: '60px',
-    },
-
-    FlightTimeContainer: {
-        border: '1px solid black',
-        marginTop: '10px',
-        width: '60px',
-        height: '60px',
-    },
-
+        gridColumn: '5/5',
+    },  
 
 }
 
@@ -63,21 +29,9 @@ const Dashbord = () => {
             <div className='videoCaptureContainer' style={styles.videoContainer}>
                 <VideoCapture />
             </div>
-            <div style={{width: '60px'}}>
-                <div className='logoutContainer' style={styles.logoutContainer}>
+            <div className='logoutContainer' style={styles.logoutContainer}>
+                <div style={{textAlign: 'center'}}>
                     <Logout />
-                </div>
-                <div className='userSettingsContainer' style={styles.userSettingsContainer}>
-                    <UserSettings />
-                </div>
-                <div className='poseContainer' style={styles.poseContainer}>
-                    <Pose />
-                </div>
-                <div className='batteryContainer' style={styles.batteryContainer}>
-                    <Battery />
-                </div>
-                <div className='flightTimeContainer' style={styles.FlightTimeContainer}>
-                    <FlightTime />
                 </div>
             </div>
         </div>
@@ -85,3 +39,4 @@ const Dashbord = () => {
 }
 
 export default Dashbord;
+
