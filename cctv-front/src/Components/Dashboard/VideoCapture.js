@@ -1,4 +1,6 @@
-const Mod1 = () => {
+
+
+const VideoCapture = () => {
     return (
         <div className='d1-m1'>
             <h1>Video capture Component</h1>
@@ -6,4 +8,4 @@ const Mod1 = () => {
     );
 }
 
-export default Mod1;
+export default VideoCapture;

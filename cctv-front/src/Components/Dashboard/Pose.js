@@ -1,6 +1,6 @@
 const Pose = () => {
     return (
-        <h1>Position Component</h1>
+        <h1>P</h1>
     );
 }
 

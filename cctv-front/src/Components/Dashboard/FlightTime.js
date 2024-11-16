@@ -1,6 +1,6 @@
 const FlightTime = () => {
     return (
-        <h1>Flight time components</h1>
+        <h1>F</h1>
     )
 }
 

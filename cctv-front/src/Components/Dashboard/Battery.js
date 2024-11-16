@@ -1,6 +1,10 @@
+import battery from '../../Assests/battery_alert.svg'
+
 const Battery = () => {
     return (
-        <h1>Battery Component</h1>
+        <>
+            <img src={battery} alt='Battery' style={{ width: '60px', height: '60px'}}/>
+        </>
     );
 }
 
