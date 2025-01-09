@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Users = require('../../models/users');
+const bcrypt = require('bcrypt');
 
 
 
@@ -24,12 +25,35 @@ router.get('/:id', getUser, (req, res) => {
 
 // Login
 
-router.post('/login', )
+router.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
+
+    try {
+        let isUser = await Users.findOne({
+            username: username
+        });
+
+        if (isUser) {
+            let checkPassword = await bcrypt.compare(password, isUser.password);
+            if (checkPassword) {
+                res.send('Success');
+            } else {
+                res.send('Connexion failed');
+            }
+        }
+    } catch ( err ) {
+        res.status(500).send();
+    }
+})
 
 // Registration
 router.post('/register', async (req, res) => {
 
-    const {username, password, email, name } = req.body;
+    const { username, password, email, name } = req.body;
 
     if (!username || !password || !email || !name) {
         return res.status(400).json({ message: 'All fields are required.' });
@@ -41,14 +65,16 @@ router.post('/register', async (req, res) => {
         });
 
         if (!isUser) {
+
+            const hashedPassword = await bcrypt.hash(password, 10);
             const user = new Users({
-                username: req.body.username,
-                password: req.body.password,
-                email: req.body.email,
-                name: req.body.name
+                username: username,
+                password: hashedPassword,
+                email: email,
+                name: name
             })
 
-            const newUser = await user.save();
+            const newUser = await user.save(); // Add new user to the database
             res.status(201).json(newUser);
         } else {
             res.json({ message: 'User already exist!' })

@@ -12,8 +12,18 @@ POST http://localhost:5000/register
 Content-type: application/json
 
 {
-    "username": "admin46541",
-    "password": "admin",
+    "username": "kawa2",
+    "password": "tamere94",
     "email": "admin@email.com",
     "name": "admin"
+}
+
+###
+
+POST http://localhost:5000/login
+Content-type: application/json
+
+{
+    "username": "kawa2",
+    "password": "tamere94"
 }
