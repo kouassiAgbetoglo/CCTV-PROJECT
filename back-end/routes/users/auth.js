@@ -3,28 +3,10 @@ const router = express.Router();
 const Users = require('../../models/users');
 const bcrypt = require('bcrypt');
 
-
-
-// Getting all
-router.get('/users', async (req, res) => {
-    try {
-        const users = await Users.find();
-        res.status(200).json(users); 
-    } catch(err) {
-        res.status(500).json({ message: err.message });
-        // Db error
-    }
-})
-
-/*
-// Getting one
-router.get('/:id', getUser, (req, res) => {
-    res.send(res.user.name);
-})
-*/
+// Reset password
+router.post('')
 
 // Login
-
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -44,9 +26,11 @@ router.post('/login', async (req, res) => {
             } else {
                 res.send('Connexion failed');
             }
+        } else {
+            res.status(404).json({ message: 'User does not exist.' });
         }
     } catch ( err ) {
-        res.status(500).send();
+        res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 })
 
@@ -65,7 +49,6 @@ router.post('/register', async (req, res) => {
         });
 
         if (!isUser) {
-
             const hashedPassword = await bcrypt.hash(password, 10);
             const user = new Users({
                 username: username,
@@ -74,21 +57,15 @@ router.post('/register', async (req, res) => {
                 name: name
             })
 
-            const newUser = await user.save(); // Add new user to the database
-            res.status(201).json(newUser);
+            await user.save(); // Add new user to the database
+            res.status(201).json({ message: 'User registered successfully.' });
         } else {
-            res.json({ message: 'User already exist!' })
+            res.json({ message: 'User already exists!' })
         }
     } catch ( err ) {
-        res.status(400).json({ message: err.message });
-        // user input wrong
+        res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 })
 
-
-// Updating one
-router.patch('/', (req, res) => {
-
-})
 
 module.exports = router;
