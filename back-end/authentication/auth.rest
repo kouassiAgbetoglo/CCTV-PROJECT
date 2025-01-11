@@ -1,0 +1,24 @@
+
+GET http://localhost:5000/
+
+###
+
+POST http://localhost:5000/register
+Content-type: application/json
+
+{
+    "username": "admin",
+    "password": "admin",
+    "email": "kouassi948@gmail.com",
+    "name": "admin"
+}
+
+###
+
+POST http://localhost:5000/login
+Content-type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}

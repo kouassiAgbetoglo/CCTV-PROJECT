@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Users = require('../../models/users');
+const Users = require('../models/users');
 const bcrypt = require('bcrypt');
 
-// Reset password
-router.post('')
+
+//
+router.get('/', (req, res) =>{
+    res.json({Message: 'Pong'});
+})
 
 // Login
 router.post('/login', async (req, res) => {
