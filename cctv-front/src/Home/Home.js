@@ -5,38 +5,40 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
     const navigate = useNavigate(); // Import useNavigate
 
-
-
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault(); // Prevent from submitting form when page is loaded
         let {username, password} = event.target.elements;
-        console.log({username: username.value, password: password.value });
         username =  username.value;
         password = password.value;
-        // Mock user data
-        const users = {username: 'admin', password: 'admin' };
-        
-        fetch('/auth/').then(
-            res=> {
-                console.log(res);
+        const loginUrl = '/auth/login/';
+
+        // Request
+
+        try {
+            const response = await fetch(loginUrl, {
+                method: 'POST',
+                body: JSON.stringify({ username, password }), // Use variables instead of hardcoded values
+                headers: {
+                    "Content-Type": 'application/json',
+                }
+            });
+    
+            // Check if the response is successful
+            if (!response.ok) {
+                const errorData = await response.json(); // Parse error response as JSON
+                console.error(errorData.message); // Log the error message from the server
+            } else {
+                const data = await response.json(); // Parse success response as JSON
+
+                // Use token to validate connection later
+                if (data.message === 'Connected.') {
+                    navigate('/dashboard', {replace: true}); // Redirect to dashboard when logged in
+                }
+
             }
-        ).catch(err => {
-            console.error(err);
-        });
-
-        
-        
-        // Check if user exists and password is correct
-        /*
-        const checkUser = (user, password) => {
-            return users.username === user && users.password === password ? true : false;
-        };
-
-        if (checkUser(username, password)) { 
-            navigate('/dashboard', {replace: true}); // Redirect to dashboard when logged in
-        };
-        */
-
+        } catch (error) {
+            console.error('Network error:', error.message); // Log any network or other errors
+        }
     }
 
     return (
