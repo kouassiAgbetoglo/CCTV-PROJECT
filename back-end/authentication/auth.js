@@ -13,6 +13,7 @@ router.get('/', (req, res) =>{
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
+
     if (!username || !password) {
         return res.status(400).json({ message: 'All fields are required.' });
     }
@@ -25,9 +26,9 @@ router.post('/login', async (req, res) => {
         if (isUser) {
             let checkPassword = await bcrypt.compare(password, isUser.password);
             if (checkPassword) {
-                res.send('Success');
+                return res.json({ message: 'Connected.' });
             } else {
-                res.send('Connexion failed');
+                res.status(401).json({ message: 'Connexion failed' });;
             }
         } else {
             res.status(404).json({ message: 'User does not exist.' });
