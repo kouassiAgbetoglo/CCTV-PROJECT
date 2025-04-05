@@ -1,16 +1,47 @@
 const express = require('express');
 const router = express.Router();
-const Users = require('../models/users');
+const Users = require('../models/users.js');
 const bcrypt = require('bcrypt');
 
+// cookies test
+/*router.get('/test-session', (req, res) => {
+    req.session.isAuth = true;
+    console.log(req.session);
+    res.send("Hello session Zaza");
+  });
+*/ 
 
-//
-router.get('/', (req, res) =>{
-    res.json({Message: 'Pong'});
+// Check if authentificated
+
+const isAuthenticated = (req, res, next) => {
+    if (req.session.isAuth) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized' });
+    }
+}
+
+
+// Authentication
+router.get('/secured-auth', isAuthenticated, (req, res) => {
+    res.json({ message: `${req.session.username} is authenticaed!` });
 })
+
+
+// Logout
+router.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ message: 'Logout failed' });
+        }
+        res.clearCookie('connect.sid'); // Clear session cookie
+        res.json({ message: 'Logged out successfully' });
+    });
+});
 
 // Login
 router.post('/login', async (req, res) => {
+
     const { username, password } = req.body;
 
 
@@ -26,8 +57,11 @@ router.post('/login', async (req, res) => {
         if (isUser) {
             let checkPassword = await bcrypt.compare(password, isUser.password);
             if (checkPassword) {
+                req.session.isAuth = true;
+                req.session.username = username;
                 return res.json({ message: 'Connected.' });
             } else {
+                req.session.isAuth = false;
                 res.status(401).json({ message: 'Connexion failed' });;
             }
         } else {

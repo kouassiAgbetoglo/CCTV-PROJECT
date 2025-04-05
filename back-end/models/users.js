@@ -1,4 +1,4 @@
-const mongoose = require('../config/db');
+const mongoose = require('../config/db.js');
 
 // Define a subscribers schema
 const userSchema = new mongoose.Schema({
