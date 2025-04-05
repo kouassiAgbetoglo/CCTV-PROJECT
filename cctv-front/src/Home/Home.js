@@ -20,7 +20,8 @@ const Home = () => {
                 body: JSON.stringify({ username, password }), // Use variables instead of hardcoded values
                 headers: {
                     "Content-Type": 'application/json',
-                }
+                },
+                credentials: 'include',
             });
     
             // Check if the response is successful

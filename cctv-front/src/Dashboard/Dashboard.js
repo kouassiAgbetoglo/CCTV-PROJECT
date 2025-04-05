@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import VideoCapture from '../Components/Dashboard/VideoCapture';
-import Logout from '../Components/Dashboard/Logout'
+import Logout from '../Components/Dashboard/Logout';
 
 const styles = {
-
     gridContainer: {
         display: 'grid',
         gridTemplateColumns: 'auto auto auto auto',
@@ -20,23 +21,48 @@ const styles = {
     logoutContainer: {
         gridColumn: '5/5',
     },  
-
-}
+};
 
 const Dashbord = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true); // 👈 Initial loading state
+
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const res = await fetch('/auth/secured-auth', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                if (res.status === 200) {
+                    setLoading(false); //  Auth OK, allow rendering
+                } else {
+                    navigate('/', { replace: true }); //  Redirect if not logged in
+                }
+            } catch (error) {
+                console.error('Session check failed:', error);
+                navigate('/', { replace: true });
+            }
+        };
+
+        checkSession();
+    }, [navigate]);
+
+    if (loading) return null; // Or show a spinner like <Loading />
+
     return (
         <div className='gridContainer' style={styles.gridContainer}>
             <div className='videoCaptureContainer' style={styles.videoContainer}>
                 <VideoCapture />
             </div>
             <div className='logoutContainer' style={styles.logoutContainer}>
-                <div style={{textAlign: 'center'}}>
+                <div style={{ textAlign: 'center' }}>
                     <Logout />
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Dashbord;
-
