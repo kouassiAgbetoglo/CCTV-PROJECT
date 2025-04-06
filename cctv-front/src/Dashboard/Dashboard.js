@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import VideoCapture from '../Components/Dashboard/VideoCapture';
 import Logout from '../Components/Dashboard/Logout';
+import LiveStream from '../Components/Dashboard/LiveStream';
 
 const styles = {
     gridContainer: {
@@ -54,7 +54,7 @@ const Dashbord = () => {
     return (
         <div className='gridContainer' style={styles.gridContainer}>
             <div className='videoCaptureContainer' style={styles.videoContainer}>
-                <VideoCapture />
+                <LiveStream />
             </div>
             <div className='logoutContainer' style={styles.logoutContainer}>
                 <div style={{ textAlign: 'center' }}>
