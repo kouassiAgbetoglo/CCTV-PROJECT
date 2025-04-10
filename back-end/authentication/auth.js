@@ -2,24 +2,17 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../models/users.js');
 const bcrypt = require('bcrypt');
-
-// cookies test
-/*router.get('/test-session', (req, res) => {
-    req.session.isAuth = true;
-    console.log(req.session);
-    res.send("Hello session Zaza");
-  });
-*/ 
+const isAuthenticated = require('../Middleware/isAuthenticated.js');
 
 // Check if authentificated
-
+/*
 const isAuthenticated = (req, res, next) => {
     if (req.session.isAuth) {
         next();
     } else {
         res.status(401).json({ message: 'Not authorized' });
     }
-}
+}*/
 
 
 // Authentication
@@ -51,14 +44,23 @@ router.post('/login', async (req, res) => {
 
     try {
         let isUser = await Users.findOne({
-            username: username
+            username
         });
+
+        // null
 
         if (isUser) {
             let checkPassword = await bcrypt.compare(password, isUser.password);
             if (checkPassword) {
                 req.session.isAuth = true;
-                req.session.username = username;
+                req.session.userId = isUser._id;
+
+                  req.session.save(err => {
+                    if (err) {
+                        return res.status(500).json({ error: 'Session error' });
+                    }
+                  }); // save the session to db
+
                 return res.json({ message: 'Connected.' });
             } else {
                 req.session.isAuth = false;

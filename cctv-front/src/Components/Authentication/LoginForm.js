@@ -44,11 +44,11 @@ const LoginForm = (props) => {
         <Navbar />
         <div className='gridContainer' style={styles.gridContainer}>
             <div className='leftSide' style={styles.leftSide}>
-                <img src={drone} alt='drone-logo' style={{width: '100%', height: '100%', objectFit: 'contain'}}/>
+              {/*  <img src={drone} alt='drone-logo' style={{width: '100%', height: '100%', objectFit: 'contain'}}/> */}
             </div>
             <div className='rightSide' style={styles.rightSide}>
                 <div>
-                    <h1 style={{textAlign: 'center', color: 'black'}}>DroneViewer</h1> {/*Mettre le nom du projet ou du site*/}
+                    <h1 style={{textAlign: 'center', color: 'black'}}>Camm</h1> {/*Mettre le nom du projet ou du site*/}
                         {/*UTILISER LE FORMGROUP DE MATERIAL UI*/}
                     <Box
                         component="form"

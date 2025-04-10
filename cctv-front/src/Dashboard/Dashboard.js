@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logout from '../Components/Dashboard/Logout';
+
+import RealTimeData from '../Components/Dashboard/RealTimeData';
 import LiveStream from '../Components/Dashboard/LiveStream';
+
 
 const styles = {
     gridContainer: {

@@ -8,6 +8,8 @@ const { app, server } = InitServer(); // Creates app + HTTP server with Socket.I
 const usersRouter = require('./authentication/auth.js');
 app.use('/auth/', usersRouter);
 
+const camerasRouter = require('./Camera/camera.js');
+app.use('/cam/', camerasRouter);
 
 // Start the HTTP server (not app.listen!)
 const PORT = process.env.PORT || 5000;

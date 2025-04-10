@@ -1,0 +1,14 @@
+
+
+
+POST http://localhost:5000/cam/create
+Content-type: application/json
+
+{
+    "cameraName": "CAM-HP52AMY3-F542",
+    "cameraType": "basic"
+}
+
+###
+
+GET http://localhost:5000/cam/camera/CAM-HP52AMY3-F542
