@@ -5,6 +5,26 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
+// Store the original fetch function
+const originalFetch = window.fetch;
+
+// Override the global fetch
+window.fetch = async (...args) => {
+  let [url, options = {}] = args;
+  
+  // Apply default credentials and headers
+  const modifiedOptions = {
+    ...options,
+    credentials: 'include', // Always include cookies
+    headers: {
+      ...(options.headers || {}),
+      'Content-Type': 'application/json', // Default content type
+    },
+  };
+
+  return originalFetch(url, modifiedOptions);
+};
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
@@ -12,7 +32,4 @@ root.render(
   </BrowserRouter>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

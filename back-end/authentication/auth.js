@@ -53,8 +53,8 @@ router.post('/login', async (req, res) => {
             let checkPassword = await bcrypt.compare(password, isUser.password);
             if (checkPassword) {
                 req.session.isAuth = true;
+                req.session.username = username;
                 req.session.userId = isUser._id;
-
                   req.session.save(err => {
                     if (err) {
                         return res.status(500).json({ error: 'Session error' });

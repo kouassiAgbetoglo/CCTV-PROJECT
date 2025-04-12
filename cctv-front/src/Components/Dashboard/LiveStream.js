@@ -16,6 +16,8 @@ const LiveStream = () => {
             socket.emit('joinRoom', 'CAM-HP52AMY3-F542');
         });
 
+        
+
         // Listen for real-time data from the server
         socket.on('dataFromCamera', (data) => {
             // Update the displayed image with the data received from the server

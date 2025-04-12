@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Cameras = require('../models/cameras');
 const Users = require('../models/users');
+const isAuthenticated = require('../Middleware/isAuthenticated.js');
+const { Socket } = require('socket.io');
 
 
 
@@ -9,7 +11,7 @@ const Users = require('../models/users');
 router.post('/create',  async (req, res) => {
   const { cameraName, cameraType } = req.body;
 
-  console.log(req.body);
+  console.log(req.session.username);
 
   if (!cameraName || !cameraType) {
     return res.status(400).json({ message: 'All fields are required.' });
@@ -35,7 +37,38 @@ router.post('/create',  async (req, res) => {
   }
 }); 
 
+router.post('/getID', isAuthenticated, async (req, res) => {
 
+ // Check if this exists
+  // retrieve camera ids from db 
+
+  try {
+    const cameras = await Cameras.find({ owner: req.session.userId }).select('cameraName -_id')
+    .lean(); // Check if user have access to a camera
+      
+    const cameraList = [];
+    
+    if (cameras) {
+      for (const cam of cameras) {
+        cameraList.push(cam.cameraName);
+      }
+      console.log(`User's camera list ${cameraList}`);
+    } else {
+      res.status(401).json({ message: 'No camera available'});
+    }
+
+    return res.json({ 
+      Cameras: cameraList,
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  };
+
+});
+
+
+/*
 router.get('/camera/:name', async (req, res) => {
 
   try {
@@ -62,7 +95,7 @@ router.get('/camera/:name', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
   }
 });
-
+*/
 
 
 module.exports = router;
