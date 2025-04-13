@@ -1,21 +1,18 @@
 import { useState } from 'react';
-import Logout from '../Components/Dashboard/Logout';
 import LiveStream from '../Components/Dashboard/LiveStream';
 import CameraList from '../Components/Dashboard/LeftPanel/CameraList';
-import AddCameraButton from '../Components/Dashboard/LeftPanel/AddCameraButton';
-import DeleteCameraButton from '../Components/Dashboard/LeftPanel/DeletteCameraButton';
+import AddCameraButton from '../Components/Dashboard/LeftPanel/AddCamera/AddCameraButton';
+import DeleteCameraButton from '../Components/Dashboard/LeftPanel/DeleteCamera/DeletteCameraButton';
 import RefreshButton from '../Components/Dashboard/LeftPanel/RefreshButton';
 import SettingsButton from '../Components/Dashboard/LeftPanel/SettingsButton';
 import ProfileButton from '../Components/Dashboard/LeftPanel/ProfileButton';
 import LogoutButton from '../Components/Dashboard/LeftPanel/LogoutButton';
 import ThemeToggleButton from '../Components/Dashboard/LeftPanel/ThemeToggleButton';
 
-const lightTheme = {
+const baseTheme = {
     contentContaier: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#f0f2f5',
-        color: '#333333',
         fontFamily: 'Segoe UI, sans-serif',
     },
     leftColumn: {
@@ -24,7 +21,6 @@ const lightTheme = {
         left: '0%',
         width: '25%',
         height: '100%',
-        backgroundColor: '#ffffff',
         padding: '1rem',
         display: 'flex',
         flexDirection: 'column',
@@ -33,15 +29,6 @@ const lightTheme = {
         gap: '2rem',
         borderRight: '1px solid #cccccc',
         boxShadow: '2px 0 5px rgba(0, 0, 0, 0.05)',
-    },
-    leftColumnItem1: {
-        width: '100%',
-    },
-    leftColumnItem2: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.8rem',
     },
     centerColumn: {
         position: 'absolute',
@@ -70,15 +57,35 @@ const lightTheme = {
     videoContainer: {
         border: '1px solid black',
         gridColumn: '1/5',
-        backgroundColor: '#ffffff', 
     },
     logoutContainer: {
         gridColumn: '5/5',
     },
 };
 
+const lightTheme = {
+    ...baseTheme,
+    contentContaier: {
+        ...baseTheme.contentContaier,
+        backgroundColor: '#f0f2f5',
+        color: '#333333',
+    },
+    leftColumn: {
+        ...baseTheme.leftColumn,
+        backgroundColor: '#ffffff',
+    },
+    gridContainer: {
+        ...baseTheme.gridContainer,
+        backgroundColor: '#ffffff',
+    },
+    videoContainer: {
+        ...baseTheme.videoContainer,
+        backgroundColor: '#ffffff',
+    },
+};
+
 const darkTheme = {
-    ...lightTheme, // on hérite pour ne pas tout réécrire
+    ...lightTheme,
     contentContaier: {
         ...lightTheme.contentContaier,
         backgroundColor: '#121212',
@@ -109,22 +116,16 @@ const Dashboard = () => {
     return (
         <div className='contentContainer' style={styles.contentContaier}>
             <div className='leftColumn' style={styles.leftColumn}>
-                <div>
-                    <div className="leftColumnItem1" style={styles.leftColumnItem1}>
-                        <CameraList />
-                    </div>
-
-                    <div className="leftColumnItem2" style={styles.leftColumnItem2}>
-                        <AddCameraButton />
-                        <DeleteCameraButton />
-                        <RefreshButton />
-                        <SettingsButton />
-                        <ProfileButton />
-                        <LogoutButton />
-                    </div>
+                <CameraList />
+                <div style={styles.leftColumnItem2}>
+                    <AddCameraButton />
+                    <DeleteCameraButton />
+                    <RefreshButton />
+                    <SettingsButton />
+                    <ProfileButton />
+                    <LogoutButton />
                 </div>
-
-                {/* Theme switcher (en bas à droite du panneau gauche) */}
+                {/* Theme switcher */}
                 <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} position="right" />
             </div>
 
@@ -132,11 +133,6 @@ const Dashboard = () => {
                 <div className='gridContainer' style={styles.gridContainer}>
                     <div className='videoCaptureContainer' style={styles.videoContainer}>
                         <LiveStream />
-                    </div>
-                    <div className='logoutContainer' style={styles.logoutContainer}>
-                        <div style={{ textAlign: 'center' }}>
-                            <Logout />
-                        </div>
                     </div>
                 </div>
             </div>

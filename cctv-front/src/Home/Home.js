@@ -7,9 +7,8 @@ const Home = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault(); // Prevent from submitting form when page is loaded
-        let {username, password} = event.target.elements;
-        username =  username.value;
-        password = password.value;
+        const username =  event.target.elements.username.value; 
+        const password = event.target.elements.password.value;
         const loginUrl = '/auth/login/';
 
         // Request

@@ -2,6 +2,7 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { useNavigate } from 'react-router-dom';
 
 // Conteneur global cliquable (icône + texte)
 const ClickableWrapper = styled('button')(({ theme, disabled }) => ({
@@ -47,10 +48,32 @@ const ClickableWrapper = styled('button')(({ theme, disabled }) => ({
   }
 }));
 
-const LogoutButton = ({ onClick, disabled = false }) => {
+const LogoutButton = ({ disabled = false }) => {
+
+  const navigate = useNavigate();
+  const logoutUrl = '/auth/logout';
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(logoutUrl, {
+          method: 'POST',
+          credentials: 'include',
+      });
+
+      if (response.ok) {
+          navigate('/');
+      } else {
+          console.error('Logout failed');
+      }
+  } catch (err) {
+      console.error('Network error during logout:', err);
+  }
+};
+
+
   return (
     <Tooltip title={disabled ? "Action non disponible" : "Se déconnecter"} placement="top">
-      <ClickableWrapper onClick={onClick} disabled={disabled} aria-label="logout">
+      <ClickableWrapper onClick={handleLogout} disabled={disabled} aria-label="logout">
         <div className="icon">
           <ExitToAppIcon />
         </div>
