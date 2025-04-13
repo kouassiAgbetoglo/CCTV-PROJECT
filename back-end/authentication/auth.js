@@ -67,7 +67,7 @@ router.post('/login', async (req, res) => {
                 res.status(401).json({ message: 'Connexion failed' });;
             }
         } else {
-            res.status(404).json({ message: 'User does not exist.' });
+            res.status(409).json({ message: 'User does not exist.' });
         }
     } catch ( err ) {
         res.status(500).json({ message: 'Server error. Please try again later.' });

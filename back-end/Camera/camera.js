@@ -7,20 +7,56 @@ const { Socket } = require('socket.io');
 
 
 
+// Delete camera
+router.post('/DeleteCamera', isAuthenticated, async (req, res) => {
+  const { cameraName } = req.body;
+
+  console.log(cameraName);
+
+  if (!cameraName) {
+    return res.status(400).json({ message: 'Camera name is required..' });
+  }
+
+  try {
+    const deleteCamera = await Cameras.findByIdAndDelete( {cameraName} );
+
+    if (!deleteCamera) {
+      return res.status(404).json({ message: 'Camera not found.' });
+    }
+
+    res.status(200).json({ message: 'Camera deleted successfully.' });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+
+})
+
 // Create a new camera for authenticated user
-router.post('/create',  async (req, res) => {
+router.post('/AddNewCamera', isAuthenticated,  async (req, res) => {
   const { cameraName, cameraType } = req.body;
 
-  console.log(req.session.username);
+  //console.log(cameraName);
 
   if (!cameraName || !cameraType) {
     return res.status(400).json({ message: 'All fields are required.' });
   }
 
   try {
+
+    const isCamera = await Cameras.findOne({ cameraName} );
+    //console.log(`Camera exists: ${isCamera}`);
+
+    if (isCamera) {
+      return res.status(409).json({ message: 'Camera already exist.' });
+    }
+
     const user = await Users.findOne({ username: req.session.username });
-    console.log(user);
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+    //console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
 
     const newCamera = new Cameras({
       cameraName,
@@ -32,7 +68,7 @@ router.post('/create',  async (req, res) => {
     res.status(201).json({ message: 'Camera created successfully.', camera: newCamera });
 
   } catch (err) {
-    console.error(err);
+    //console.error(err);
     res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 }); 
@@ -43,8 +79,7 @@ router.post('/getID', isAuthenticated, async (req, res) => {
   // retrieve camera ids from db 
 
   try {
-    const cameras = await Cameras.find({ owner: req.session.userId }).select('cameraName -_id')
-    .lean(); // Check if user have access to a camera
+    const cameras = await Cameras.find({ owner: req.session.userId }).select('cameraName -_id').lean(); // CHeck if cameras exist
       
     const cameraList = [];
     
@@ -52,7 +87,7 @@ router.post('/getID', isAuthenticated, async (req, res) => {
       for (const cam of cameras) {
         cameraList.push(cam.cameraName);
       }
-      console.log(`User's camera list ${cameraList}`);
+      //console.log(`User's camera list ${cameraList}`);
     } else {
       res.status(401).json({ message: 'No camera available'});
     }

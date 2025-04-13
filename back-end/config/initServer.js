@@ -39,7 +39,7 @@ const initServer = () => {
       httpOnly: true,
       secure: false, // true if using https
       sameSite: 'lax', // or 'none' if on HTTPS and cross-domain
-      maxAge: 600*1000, // Time validity of the cookie
+      maxAge: 3600*1000, // Time validity of the cookie
     }
   });
 
