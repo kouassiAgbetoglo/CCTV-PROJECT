@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import LiveStream from '../Components/Dashboard/LiveStream';
 import CameraList from '../Components/Dashboard/LeftPanel/CameraList';
 import AddCameraButton from '../Components/Dashboard/LeftPanel/AddCamera/AddCameraButton';
 import DeleteCameraButton from '../Components/Dashboard/LeftPanel/DeleteCamera/DeletteCameraButton';
@@ -8,6 +7,8 @@ import SettingsButton from '../Components/Dashboard/LeftPanel/SettingsButton';
 import ProfileButton from '../Components/Dashboard/LeftPanel/ProfileButton';
 import LogoutButton from '../Components/Dashboard/LeftPanel/LogoutButton';
 import ThemeToggleButton from '../Components/Dashboard/LeftPanel/ThemeToggleButton';
+import StreamContainer from '../Components/Dashboard/MainPanel/StreamContainer';
+
 
 const baseTheme = {
     contentContaier: {
@@ -19,7 +20,7 @@ const baseTheme = {
         position: 'absolute',
         top: '0%',
         left: '0%',
-        width: '25%',
+        width: '20%',
         height: '100%',
         padding: '1rem',
         display: 'flex',
@@ -30,11 +31,11 @@ const baseTheme = {
         borderRight: '1px solid #cccccc',
         boxShadow: '2px 0 5px rgba(0, 0, 0, 0.05)',
     },
-    centerColumn: {
+    mainColumn: {
         position: 'absolute',
         top: '0%',
         right: '0%',
-        width: '75%',
+        width: '80%',
         height: '100%',
         padding: '1rem',
         display: 'flex',
@@ -113,30 +114,32 @@ const Dashboard = () => {
     const styles = theme === 'light' ? lightTheme : darkTheme;
     const toggleTheme = () => setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
 
+    const [refreshKey, setRefreshKey] = useState(0);
+    const handleRefresh = () => {
+        setRefreshKey(prev => prev + 1);
+    };
+
     return (
-        <div className='contentContainer' style={styles.contentContaier}>
-            <div className='leftColumn' style={styles.leftColumn}>
-                <CameraList />
-                <div style={styles.leftColumnItem2}>
-                    <AddCameraButton />
-                    <DeleteCameraButton />
-                    <RefreshButton />
-                    <SettingsButton />
-                    <ProfileButton />
-                    <LogoutButton />
+        <>
+            <div className='contentContainer' style={styles.contentContaier}>
+                <div className='leftColumn' style={styles.leftColumn}>
+                        <CameraList key={refreshKey} />
+                        <AddCameraButton />
+                        <DeleteCameraButton />
+                        <RefreshButton onRefresh={handleRefresh} />
+                        <SettingsButton />
+                        <ProfileButton />
+                        <LogoutButton />
+                    {/* Theme switcher */}
+                    <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} position="right" />
                 </div>
-                {/* Theme switcher */}
-                <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} position="right" />
+
+                <div className='mainColumn' style={styles.mainColumn}>
+                    <StreamContainer key={refreshKey}/>
+                </div>
             </div>
 
-            <div className='centerColumn' style={styles.centerColumn}>
-                <div className='gridContainer' style={styles.gridContainer}>
-                    <div className='videoCaptureContainer' style={styles.videoContainer}>
-                        <LiveStream />
-                    </div>
-                </div>
-            </div>
-        </div>
+        </>
     );
 };
 

@@ -1,8 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
+import getCameraId from './getCameraId';
+
 
 const styles = {
     headerContent: {
@@ -14,35 +16,16 @@ const styles = {
 
 const CameraList = () => {
     const [cameraId, setCameraId] = useState([]);
-    const getCameraIdsUrl = 'cam/getID';
 
-    // Fonction pour obtenir les ID des caméras
-    const getCamera = useCallback(async () => {
-        try {
-            const response = await fetch(getCameraIdsUrl, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    "Content-Type": 'application/json',
-                },
-            });
-
-            if (!response.ok) { // Exit if the request is not valid
-                return; 
-            }
-
-            const data = await response.json();
-            const cameras = data.Cameras;
+    useEffect(() => {
+        const fetchData = async () => {
+            const cameras = await getCameraId();
             if (cameras) {
                 setCameraId(cameras);
             }
-        } catch (error) {
-            console.error('Cant access camera :', error);
         }
-    }, [getCameraIdsUrl]);
-
-    // Appel de la fonction getCamera
-    getCamera();
+        fetchData();
+    }, []);
 
     // Gestionnaire d'événements lors du clic sur un élément de la liste
     const handleItemClick = (cameraId) => {

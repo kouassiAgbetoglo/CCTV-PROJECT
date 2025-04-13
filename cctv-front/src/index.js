@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
+
 // Store the original fetch function
 const originalFetch = window.fetch;
 
@@ -28,6 +29,7 @@ window.fetch = async (...args) => {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
+
     <App />
   </BrowserRouter>
 );

@@ -3,8 +3,6 @@ const router = express.Router();
 const Cameras = require('../models/cameras');
 const Users = require('../models/users');
 const isAuthenticated = require('../Middleware/isAuthenticated.js');
-const { Socket } = require('socket.io');
-
 
 
 // Delete camera
@@ -18,9 +16,12 @@ router.post('/DeleteCamera', isAuthenticated, async (req, res) => {
   }
 
   try {
-    const deleteCamera = await Cameras.findByIdAndDelete( {cameraName} );
+    const deletedCamera = await Cameras.findOneAndDelete({
+      cameraName,
+      owner: req.session.userId // ou autre identifiant stocké dans la session
+    });
 
-    if (!deleteCamera) {
+    if (!deletedCamera) {
       return res.status(404).json({ message: 'Camera not found.' });
     }
 

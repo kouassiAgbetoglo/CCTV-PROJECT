@@ -74,15 +74,8 @@ const AddCameraButton = () => {
         headers: {
           "Content-Type": 'application/json',
         },
-      credentials: 'include',
+        credentials: 'include',
       })
-
-      /*
-      if (!response.ok) {
-        const errorData = await response.json(); 
-        console.error(errorData.message); 
-        return;
-      }*/
 
       if (response.status === 409) {
         const data = await response.json();

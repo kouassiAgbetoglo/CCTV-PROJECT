@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -45,10 +44,11 @@ const ClickableWrapper = styled('button')(({ theme }) => ({
   }
 }));
 
-const RefreshButton = ({ onClick }) => {
+const RefreshButton = ({ onRefresh }) => {
+
   return (
     <Tooltip title="Actualiser" placement="top">
-      <ClickableWrapper onClick={onClick} aria-label="refresh">
+      <ClickableWrapper onClick={onRefresh} aria-label="refresh">
         <div className="icon">
           <RefreshIcon />
         </div>

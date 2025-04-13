@@ -48,7 +48,7 @@ const ClickableWrapper = styled('button')(({ theme, disabled }) => ({
   }
 }));
 
-const DeleteCameraButton = ({ onClick, disabled = false }) => {
+const DeleteCameraButton = ({ disabled = false }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   
@@ -65,7 +65,7 @@ const DeleteCameraButton = ({ onClick, disabled = false }) => {
       const cameraName = event.target.elements.cameraName.value;
       const deleteCameraUrl = 'cam/DeleteCamera';
 
-      console.log(`Nom de la caméra: ${cameraName}`);
+      //console.log(`Nom de la caméra: ${cameraName}`);
 
       try {
         const response = await fetch(deleteCameraUrl,{
