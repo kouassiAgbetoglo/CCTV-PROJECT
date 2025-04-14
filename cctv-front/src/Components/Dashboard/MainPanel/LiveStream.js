@@ -12,7 +12,7 @@ const LiveStream = (props) => {
 
         socket.on('connect', () => {
             console.log('Connected to server');
-            socket.emit('joinRoom', 'CAM-HP52AMY3-F542');
+            socket.emit('joinRoom', roomId); // Utilisation de la prop cameraId
         });
 
         socket.on('dataFromCamera', (data) => {
@@ -29,19 +29,18 @@ const LiveStream = (props) => {
         return () => {
             socket.disconnect();
         };
-    }, []);
+    }, [roomId]); // Ajout de roomId comme dépendance
 
     return (
-        <div
-            style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-            }}
-        >
+        <div style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden',
+            backgroundColor: '#000' // Fond noir pour les zones non couvertes
+        }}>
             {error ? (
                 <div style={{ color: 'red' }}>{error}</div>
             ) : (
@@ -50,7 +49,8 @@ const LiveStream = (props) => {
                     style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover', // you can change to 'contain' if needed
+                        objectFit: 'cover', // Remplit tout l'espace en conservant le ratio
+                        display: 'block'
                     }}
                     alt="Live Feed"
                     onError={() => setError('Failed to load video feed.')}

@@ -32,7 +32,8 @@ const Home = () => {
 
                 // Use token to validate connection later
                 if (data.message === 'Connected.') {
-                    navigate('/dashboard', {replace: true}); // Redirect to dashboard when logged in
+                    navigate('/dashboard', {replace: true}); //  A CHANGER
+                    // Redirect to dashboard when logged in
                 }
 
             }

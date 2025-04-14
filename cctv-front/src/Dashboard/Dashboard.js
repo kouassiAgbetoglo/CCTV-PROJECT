@@ -9,65 +9,60 @@ import LogoutButton from '../Components/Dashboard/LeftPanel/LogoutButton';
 import ThemeToggleButton from '../Components/Dashboard/LeftPanel/ThemeToggleButton';
 import StreamContainer from '../Components/Dashboard/MainPanel/StreamContainer';
 
-
 const baseTheme = {
-    contentContaier: {
-        width: '100%',
+    contentContainer: {
+        width: '100vw', // Utilisation de vw au lieu de %
         height: '100%',
         fontFamily: 'Segoe UI, sans-serif',
+        display: 'grid',
+        gridTemplateColumns: 'minmax(200px, 20%) 1fr', // Colonne gauche avec largeur minimale
+        gridTemplateRows: '1fr',
+        overflow: 'hidden', // Empêche tout débordement
+        minWidth: '320px', // Largeur minimale pour éviter l'écrasement
+        minHeight: '480px' // Hauteur minimale
     },
+
     leftColumn: {
-        position: 'absolute',
-        top: '0%',
-        left: '0%',
-        width: '20%',
-        height: '100%',
-        padding: '1rem',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        gap: '2rem',
         borderRight: '1px solid #cccccc',
         boxShadow: '2px 0 5px rgba(0, 0, 0, 0.05)',
     },
+
     mainColumn: {
-        position: 'absolute',
-        top: '0%',
-        right: '0%',
-        width: '80%',
-        height: '100%',
         padding: '1rem',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        overflowY: 'auto',
-    },
-    gridContainer: {
-        display: 'grid',
-        gridTemplateColumns: 'auto auto auto auto',
-        width: '100%',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        border: '2px solid #e0e0e0',
-        padding: '10px',
-        backgroundColor: '#ffffff',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-    },
-    videoContainer: {
         border: '1px solid black',
-        gridColumn: '1/5',
+        overflow: 'hidden', // Change de 'auto' à 'hidden' pour contenir les enfants
+        position: 'relative', // Maintenu pour le positionnement
+        minWidth: '300px', // Largeur minimale absolue
     },
-    logoutContainer: {
-        gridColumn: '5/5',
+    themeToggleContainer: {
+        position: 'relative', // Change de 'absolute' à 'sticky'
+        alignSelf: 'flex-end',
+        zIndex: 10,
+        marginBottom: '0.5%',
     },
+
+    fixedBottomDiv: {
+        position: 'fixed',
+        bottom: '5%',
+        left: '0',
+        width: '20%', // Même largeur que leftColumn
+        padding: '1rem',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        borderTop: '1px solid #ccc',
+        zIndex: 100,
+        boxSizing: 'border-box'
+    }
 };
+
 
 const lightTheme = {
     ...baseTheme,
-    contentContaier: {
-        ...baseTheme.contentContaier,
+    contentContainer: {
+        ...baseTheme.contentContainer,
         backgroundColor: '#f0f2f5',
         color: '#333333',
     },
@@ -75,37 +70,27 @@ const lightTheme = {
         ...baseTheme.leftColumn,
         backgroundColor: '#ffffff',
     },
-    gridContainer: {
-        ...baseTheme.gridContainer,
-        backgroundColor: '#ffffff',
-    },
-    videoContainer: {
-        ...baseTheme.videoContainer,
+    mainColumn: {
+        ...baseTheme.mainColumn,
         backgroundColor: '#ffffff',
     },
 };
 
 const darkTheme = {
-    ...lightTheme,
-    contentContaier: {
-        ...lightTheme.contentContaier,
+    ...baseTheme,
+    contentContainer: {
+        ...baseTheme.contentContainer,
         backgroundColor: '#121212',
         color: '#ffffff',
     },
     leftColumn: {
-        ...lightTheme.leftColumn,
+        ...baseTheme.leftColumn,
         backgroundColor: '#1e1e1e',
         borderRight: '1px solid #2e2e2e',
     },
-    gridContainer: {
-        ...lightTheme.gridContainer,
+    mainColumn: {
+        ...baseTheme.mainColumn,
         backgroundColor: '#1a1a1a',
-        border: '2px solid #333333',
-    },
-    videoContainer: {
-        ...lightTheme.videoContainer,
-        backgroundColor: '#000',
-        border: '1px solid #444444',
     },
 };
 
@@ -120,26 +105,35 @@ const Dashboard = () => {
     };
 
     return (
-        <>
-            <div className='contentContainer' style={styles.contentContaier}>
-                <div className='leftColumn' style={styles.leftColumn}>
-                        <CameraList key={refreshKey} />
-                        <AddCameraButton />
-                        <DeleteCameraButton />
-                        <RefreshButton onRefresh={handleRefresh} />
-                        <SettingsButton />
-                        <ProfileButton />
-                        <LogoutButton />
-                    {/* Theme switcher */}
-                    <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} position="right" />
-                </div>
-
-                <div className='mainColumn' style={styles.mainColumn}>
-                    <StreamContainer key={refreshKey}/>
+        <div className='contentContainer' style={styles.contentContainer}>
+            <div className='leftColumn' style={styles.leftColumn}>
+                <div style={{ width: '100%', paddingLeft: '5%' }}> {/* Conteneur pour le décalage */}
+                    <CameraList key={refreshKey} />
+                    <div style={{ marginBottom: '2.5%' }}><AddCameraButton /></div>
+                    <div style={{ marginBottom: '2.5%' }}><DeleteCameraButton /></div>
+                    <div style={{ marginBottom: '2.5%' }}><RefreshButton onRefresh={handleRefresh} /></div>
+                    <div style={{ marginBottom: '2.5%' }}><SettingsButton /></div>
+                    <div style={{ marginBottom: '2.5%' }}><ProfileButton /></div>
+                    <div style={{ marginBottom: '2.5%' }}><LogoutButton /></div>
                 </div>
             </div>
 
-        </>
+            <div className='mainColumn' style={styles.mainColumn}>
+                <div style={styles.themeToggleContainer}>
+                    <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} />
+                </div>
+            
+                <div style={{
+                    width: '100%',
+                    height: 'calc(100% - 40px)', // Réserve de l'espace pour le toggle
+                    overflow: 'auto',
+                    boxSizing: 'border-box'
+                }}>
+                    <StreamContainer key={refreshKey} />
+                </div>
+            </div>
+
+        </div>
     );
 };
 

@@ -1,18 +1,31 @@
 import { useState, useEffect } from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import getCameraId from './getCameraId';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 
 
 const styles = {
+    cardItem: {
+        marginBottom: '8px',
+        cursor: 'pointer',
+        '&:hover': {
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+        }
+    },
+
     headerContent: {
         fontSize: '125%',
         fontWeight: 'bold',
         color: 'black',
+        textAlign: 'left',
     },
-}
+
+};
+
+
 
 const CameraList = () => {
     const [cameraId, setCameraId] = useState([]);
@@ -27,41 +40,41 @@ const CameraList = () => {
         fetchData();
     }, []);
 
-    // Gestionnaire d'événements lors du clic sur un élément de la liste
     const handleItemClick = (cameraId) => {
         console.log('Caméra cliquée:', cameraId);
-        // Vous pouvez effectuer une action avec l'ID de la caméra, comme naviguer vers une autre page ou afficher des détails.
     };
 
+    // Crée un tableau avec toujours 4 éléments (rempli avec null si nécessaire)
+    const displayItems = [...cameraId];
+    while (displayItems.length < 4) {
+        displayItems.push(null);
+    }
+    displayItems.length = 4; // Garantit exactement 4 éléments
+
     return (
-        <div>
-            <List
-                sx={{
-                    width: '85%',
-                    maxWidth: 350,
-                    bgcolor: 'background.paper',
-                    position: 'relative',
-                    overflow: 'auto',
-                    maxHeight: 300,
-                    '& ul': { padding: 0 },
-                }}
-                subheader={<li />}
-            >
-                <li>
-                    <ul>
-                        <ListSubheader style={styles.headerContent}>{`Mes caméras:`}</ListSubheader>
-                        {cameraId.map((item) => (
-                            <ListItem
-                                key={`item-${item}`}
-                                button
-                                onClick={() => handleItemClick(item)} // Gestion du clic
-                            >
-                                <ListItemText primary={`- ${item}`} />
-                            </ListItem>
-                        ))}
-                    </ul>
-                </li>
-            </List>
+        <div style={styles.listContainer}>
+            <ListSubheader style={styles.headerContent}>
+                {`Mes caméras:`}
+            </ListSubheader>
+            <Table size="small">
+                <TableBody>
+                    {displayItems.map((item, index) => (
+                        <TableRow 
+                            key={item ? `item-${item}` : `empty-${index}`}
+                            hover={!!item}
+                            onClick={() => item && handleItemClick(item)}
+                            sx={{ 
+                                cursor: item ? 'pointer' : 'default',
+                                height: '48px' // Hauteur fixe pour les lignes vides
+                            }}
+                        >
+                            <TableCell>
+                                {item ? `- ${item}` : '\u00A0'} {/* &nbsp; pour les cellules vides */}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
         </div>
     );
 };
