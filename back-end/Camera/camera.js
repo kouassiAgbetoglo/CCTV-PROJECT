@@ -34,6 +34,7 @@ router.post('/DeleteCamera', isAuthenticated, async (req, res) => {
 
 })
 
+//
 // Create a new camera for authenticated user
 router.post('/AddNewCamera', isAuthenticated,  async (req, res) => {
   const { cameraName, cameraType } = req.body;

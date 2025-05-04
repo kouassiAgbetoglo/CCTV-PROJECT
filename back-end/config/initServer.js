@@ -23,8 +23,11 @@ const initServer = () => {
 
 
   app.use(cors({
-    origin: 'http://localhost:3000',
+    origin:[
+      'http://localhost:3000',
+    ],
     credentials: true,
+    exposedHeaders: ['set-cookie'],
   }));
 
 
@@ -38,7 +41,7 @@ const initServer = () => {
     cookie: {
       httpOnly: true,
       secure: false, // true if using https
-      sameSite: 'lax', // or 'none' if on HTTPS and cross-domain
+      sameSite: 'none', // or 'none' if on HTTPS and cross-domain
       maxAge: 3600*1000, // Time validity of the cookie
     }
   });
@@ -49,8 +52,11 @@ const initServer = () => {
   const server = http.createServer(app);
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin:[
+        'http://localhost:3000',
+      ],
       credentials: true,
+      exposedHeaders: ['set-cookie'] ,
     }
   });
   
