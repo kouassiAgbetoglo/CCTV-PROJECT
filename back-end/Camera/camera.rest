@@ -1,0 +1,14 @@
+
+
+
+POST http://localhost:5000/cam/create
+Content-type: application/json
+
+{
+    "cameraName": "CAM-H1",
+    "cameraType": "basic"
+}
+
+###
+
+POST http://localhost:5000/cam/camera/zaza
