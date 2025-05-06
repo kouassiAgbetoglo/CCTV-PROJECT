@@ -43,14 +43,14 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        let isUser = await Users.findOne({
+        const isUser = await Users.findOne({
             username
         });
 
         // null
 
         if (isUser) {
-            let checkPassword = await bcrypt.compare(password, isUser.password);
+            const checkPassword = await bcrypt.compare(password, isUser.password);
             if (checkPassword) {
                 req.session.isAuth = true;
                 req.session.username = username;

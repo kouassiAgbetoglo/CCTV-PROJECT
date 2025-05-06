@@ -1,0 +1,32 @@
+POST http://localhost:5000/auth/login
+Content-type: application/json
+
+{
+    "username": "admin1",
+    "password": "tamere"
+}
+
+
+###
+
+POST http://localhost:5000/reset/modification-password
+Content-type: application/json
+
+{
+    "oldPassword": "admin1",
+    "newPassword": "tamere",
+    "confirmPassword": "tamere",
+    "username": "admin1"
+}
+
+###
+
+
+POST http://localhost:5000/reset/modification-email
+Content-type: application/json
+
+{
+    "email": "admin1@admmin.com",
+    "newEmail": "test1@admin.com",
+    "username": "admin1"
+}
