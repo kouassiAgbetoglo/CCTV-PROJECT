@@ -8,8 +8,10 @@ require('dotenv').config();
 
 
 const isAuthenticated = require('../Middleware/isAuthenticated.js');
+const authenticateToken = require('../Middleware/authToken.js');
 
 const jwtSecret = process.env.JWT_SECRET;
+const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
 
 
 // Check if authentificated
@@ -27,6 +29,10 @@ router.get('/secured-auth', isAuthenticated, (req, res) => {
     res.json({ message: `${req.session.username} is authenticaed!` });
 })
 
+router.get('/protected-route', authenticateToken, (req, res) => {
+    res.json({ message: 'Protected data', user: req.user });
+  });
+
 
 // Logout
 router.post('/logout', (req, res) => {
@@ -37,6 +43,20 @@ router.post('/logout', (req, res) => {
         res.clearCookie('connect.sid'); // Clear session cookie
         res.json({ message: 'Logged out successfully' });
     });
+});
+
+router.post('/logout1', authenticateToken, async (req, res) => {
+    try {
+        // Remove refresh token from database
+        await Users.updateOne(
+            { username: req.user.username }, 
+            { $unset: { refreshToken: 1 } }
+        );
+        
+        return res.status(200).json({ message: 'Logged out successfully' });
+    } catch (err) {
+        return res.status(500).json({ message: 'Server error during logout' });
+    }
 });
 
 // JWT Login
@@ -57,14 +77,33 @@ router.post('/login1', async (req, res) => {
         // null
 
         if (!isUser) {
-            res.status(409).json({ message: 'User does not exists!' });
+           return res.status(409).json({ message: 'User does not exists!' });
         }
 
         const checkPassword = await bcrypt.compare(password, isUser.password);
         if (checkPassword) {
-            const token = jwt.sign({ username: isUser.username }, jwtSecret);
-            console.log(token);
-            return res.status(201).send({ data: token })
+            // Create access token
+            const token = jwt.sign({ username: isUser.username }, jwtSecret, { expiresIn: "15m" }); // 15min duration
+
+            // Create refresh token
+            const refreshToken = jwt.sign({ username: isUser.username }, jwtRefreshSecret, { expiresIn: "1d" }); // 1day duration
+
+            // Update user with refresh token
+            const updatedUser = await Users.findOneAndUpdate(
+                { username },
+                { refreshToken },
+                { new: true } // Return the updated document
+            );
+
+            // Verify the update
+            if (!updatedUser || updatedUser.refreshToken !== refreshToken) {
+                throw new Error('Failed to update refresh token');
+            }
+
+            return res.status(200).json({ 
+                token, 
+                refreshToken 
+            });
         } else {
             res.status(401).json({ message: 'Connexion failed' });;
         }
@@ -118,6 +157,38 @@ router.post('/login', async (req, res) => {
 
 // Registration
 router.post('/register', async (req, res) => {
+
+    const { username, password, email, name } = req.body;
+
+    if (!username || !password || !email || !name) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
+
+    try {
+        let isUser = await Users.findOne({
+            username: username
+        });
+
+        if (!isUser) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const user = new Users({
+                username: username,
+                password: hashedPassword,
+                email: email,
+                name: name
+            })
+
+            await user.save(); // Add new user to the database
+            res.status(201).json({ message: 'User registered successfully.' });
+        } else {
+            res.json({ message: 'User already exists!' })
+        }
+    } catch ( err ) {
+        res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+})
+
+router.post('/register1', authenticateToken, async (req, res) => {
 
     const { username, password, email, name } = req.body;
 

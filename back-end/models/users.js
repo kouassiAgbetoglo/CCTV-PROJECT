@@ -22,8 +22,11 @@ const userSchema = new mongoose.Schema({
         type: Date,
         required: true,
         default: Date.now
+    },
+    refreshToken: {
+        type: String,
+        default: null
     }
-
 })
 
 module.exports = mongoose.model('Users', userSchema);

@@ -15,10 +15,30 @@ Content-type: application/json
 
 ###
 
-POST http://localhost:5000/auth/login
+POST http://localhost:5000/auth/register1
 Content-type: application/json
 
 {
-    "username": "admin1",
-    "password": "admin1"
+    "username": "admin",
+    "password": "admin",
+    "email": "admin@admmin.com",
+    "name": "admin"
+}
+
+###
+
+POST http://localhost:5000/auth/login1
+Content-type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}
+
+###
+
+POST http://localhost:5000/auth/logout1
+Content-type: application/json
+
+{
 }
