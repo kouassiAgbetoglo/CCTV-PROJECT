@@ -2,7 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../models/users.js');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+
+
 const isAuthenticated = require('../Middleware/isAuthenticated.js');
+
+const jwtSecret = process.env.JWT_SECRET;
+
 
 // Check if authentificated
 /*
@@ -13,7 +21,6 @@ const isAuthenticated = (req, res, next) => {
         res.status(401).json({ message: 'Not authorized' });
     }
 }*/
-
 
 // Authentication
 router.get('/secured-auth', isAuthenticated, (req, res) => {
@@ -31,6 +38,41 @@ router.post('/logout', (req, res) => {
         res.json({ message: 'Logged out successfully' });
     });
 });
+
+// JWT Login
+router.post('/login1', async (req, res) => {
+
+    const { username, password } = req.body;
+
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
+
+    try {
+        const isUser = await Users.findOne({
+            username
+        });
+
+        // null
+
+        if (!isUser) {
+            res.status(409).json({ message: 'User does not exists!' });
+        }
+
+        const checkPassword = await bcrypt.compare(password, isUser.password);
+        if (checkPassword) {
+            const token = jwt.sign({ username: isUser.username }, jwtSecret);
+            console.log(token);
+            return res.status(201).send({ data: token })
+        } else {
+            res.status(401).json({ message: 'Connexion failed' });;
+        }
+        
+    } catch ( err ) {
+        res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+})
 
 // Login
 router.post('/login', async (req, res) => {
