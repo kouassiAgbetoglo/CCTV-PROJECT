@@ -26,137 +26,140 @@ const isAuthenticated = (req, res, next) => {
 
 // Authentication
 router.get('/secured-auth', isAuthenticated, (req, res) => {
-    res.json({ message: `${req.session.username} is authenticaed!` });
+  return res.json({ message: `${req.session.username} is authenticaed!` });
 })
 
 router.get('/protected-route', authenticateToken, (req, res) => {
-    res.json({ message: 'Protected data', user: req.user });
+  return res.json({ message: 'Protected data', user: req.user });
   });
 
 
 // Logout
 router.post('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).json({ message: 'Logout failed' });
-        }
-        res.clearCookie('connect.sid'); // Clear session cookie
-        res.json({ message: 'Logged out successfully' });
-    });
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ message: 'Logout failed' });
+    }
+    res.clearCookie('connect.sid'); // Clear session cookie
+    return res.status().json({ message: 'Logged out successfully' });
+  });
 });
 
 router.post('/logout1', authenticateToken, async (req, res) => {
 
-    console.log(`User--: ${req.user}, ${Object.keys(req.user)}`);
+  try {
+    // Remove refresh token from database
+    const result = await Users.updateOne(
+        { username: req.user.username }, 
+        { $unset: { refreshToken: 1 } }
+    );
 
-
-    try {
-        // Remove refresh token from database
-        await Users.updateOne(
-            { username: req.user.username }, 
-            { $unset: { refreshToken: 1 } }
-        );
-        
-        return res.status(200).json({ message: 'Logged out successfully' });
-    } catch (err) {
-        return res.status(500).json({ message: 'Server error during logout' });
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: 'User not found.' });
     }
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({ message: 'No refresh token available.' });
+    }
+      
+    return res.status(200).json({ message: 'Logged out successfully' });
+
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error during logout' });
+  }
 });
 
 // JWT Login
 router.post('/login1', async (req, res) => {
 
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
+  if (!username || !password) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
 
-    if (!username || !password) {
-        return res.status(400).json({ message: 'All fields are required.' });
+  try {
+    const isUser = await Users.findOne({
+      username
+    });
+
+      // null
+
+    if (!isUser) {
+      return res.status(404).json({ message: 'User does not exists!' });
     }
 
-    try {
-        const isUser = await Users.findOne({
-            username
-        });
+    const checkPassword = await bcrypt.compare(password, isUser.password);
 
-        // null
-
-        if (!isUser) {
-           return res.status(409).json({ message: 'User does not exists!' });
-        }
-
-        const checkPassword = await bcrypt.compare(password, isUser.password);
-        if (checkPassword) {
-            // Create access token
-            const token = jwt.sign({ username: isUser.username }, jwtSecret, { expiresIn: "15m" }); // 15min duration
-
-            // Create refresh token
-            const refreshToken = jwt.sign({ username: isUser.username }, jwtRefreshSecret, { expiresIn: "1d" }); // 1day duration
-
-            // Update user with refresh token
-            const updatedUser = await Users.findOneAndUpdate(
-                { username },
-                { refreshToken },
-                { new: true } // Return the updated document
-            );
-
-            // Verify the update
-            if (!updatedUser || updatedUser.refreshToken !== refreshToken) {
-                throw new Error('Failed to update refresh token');
-            }
-
-            return res.status(200).json({ 
-                token, 
-                refreshToken 
-            });
-        } else {
-            res.status(401).json({ message: 'Connexion failed' });;
-        }
-        
-    } catch ( err ) {
-        res.status(500).json({ message: 'Server error. Please try again later.' });
+    if (!checkPassword) {
+      return res.status(401).json({ message: 'Invalid credentials. Login failed.' });
     }
+    
+    // Create access token
+    const token = jwt.sign({ username: isUser.username }, jwtSecret, { expiresIn: "15m" }); // 15min duration
+
+    // Create refresh token
+    const refreshToken = jwt.sign({ username: isUser.username }, jwtRefreshSecret, { expiresIn: "1d" }); // 1day duration
+
+    // Update user with refresh token
+    const updatedUser = await Users.findOneAndUpdate(
+        { username },
+        { refreshToken },
+        { new: true } 
+    );
+
+    // Verify the update
+    if (!updatedUser || updatedUser.refreshToken !== refreshToken) {
+      return res.status(500).json({ message: 'Failed to update refresh token.' });
+    }
+
+    return res.status(200).json({ // A remplacer par 201
+      token, 
+      refreshToken 
+    })
+  } catch ( err ) {
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
 })
 
 // Login
 router.post('/login', async (req, res) => {
 
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
 
-    if (!username || !password) {
-        return res.status(400).json({ message: 'All fields are required.' });
+  if (!username || !password) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  try {
+    const isUser = await Users.findOne({
+      username
+    });
+
+    if (isUser) {
+      const checkPassword = await bcrypt.compare(password, isUser.password);
+      if (checkPassword) {
+        req.session.isAuth = true;
+        req.session.username = username;
+        req.session.userId = isUser._id;
+        req.session.save(err => {
+          if (err) {
+              return res.status(500).json({ error: 'Session error' });
+          }
+        }); // save the session to db
+
+        return res.json({ message: 'Connected.' });
+      } else {
+        req.session.isAuth = false;
+        res.status(401).json({ message: 'Connexion failed' });;
+      }
+    } else {
+      res.status(409).json({ message: 'User does not exist.' });
     }
-
-    try {
-        const isUser = await Users.findOne({
-            username
-        });
-
-        // null
-
-        if (isUser) {
-            const checkPassword = await bcrypt.compare(password, isUser.password);
-            if (checkPassword) {
-                req.session.isAuth = true;
-                req.session.username = username;
-                req.session.userId = isUser._id;
-                  req.session.save(err => {
-                    if (err) {
-                        return res.status(500).json({ error: 'Session error' });
-                    }
-                  }); // save the session to db
-
-                return res.json({ message: 'Connected.' });
-            } else {
-                req.session.isAuth = false;
-                res.status(401).json({ message: 'Connexion failed' });;
-            }
-        } else {
-            res.status(409).json({ message: 'User does not exist.' });
-        }
-    } catch ( err ) {
-        res.status(500).json({ message: 'Server error. Please try again later.' });
-    }
+  } catch ( err ) {
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
 })
 
 // Registration
@@ -200,6 +203,8 @@ router.post('/register1', authenticateToken, async (req, res) => {
         return res.status(400).json({ message: 'All fields are required.' });
     }
 
+    // Ajouter plus tard, uniquement les personnes autorisé peuvent creer un compte (admin ...)
+
     console.log(username);
 
     try {
@@ -208,7 +213,7 @@ router.post('/register1', authenticateToken, async (req, res) => {
         });
 
         if (isUser) {
-            
+            return res.status(409).json({ message: 'User already exists!' })
         }
 
         if (!isUser) {
@@ -221,10 +226,8 @@ router.post('/register1', authenticateToken, async (req, res) => {
             })
 
             await user.save(); // Add new user to the database
-            res.status(201).json({ message: 'User registered successfully.' });
-        } else {
-            res.status(409).json({ message: 'User already exists!' })
-        }
+            return res.status(201).json({ message: 'User registered successfully.' });
+        } 
     } catch ( err ) {
         res.status(500).json({ message: 'Server error. Please try again later.' });
     }
