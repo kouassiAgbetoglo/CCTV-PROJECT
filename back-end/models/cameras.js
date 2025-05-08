@@ -18,6 +18,16 @@ const cameraSchema = new mongoose.Schema({
         required: true,
     },
 
+    location : {
+        type: String,
+        default: null,
+    },
+
+    status : {
+        type: String,
+        default: null,
+    },
+
     activationDate: {
         type: Date,
         required: true,

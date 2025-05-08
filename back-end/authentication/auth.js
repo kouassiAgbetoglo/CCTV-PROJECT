@@ -46,6 +46,10 @@ router.post('/logout', (req, res) => {
 });
 
 router.post('/logout1', authenticateToken, async (req, res) => {
+
+    console.log(`User--: ${req.user}, ${Object.keys(req.user)}`);
+
+
     try {
         // Remove refresh token from database
         await Users.updateOne(
@@ -158,7 +162,7 @@ router.post('/login', async (req, res) => {
 // Registration
 router.post('/register', async (req, res) => {
 
-    const { username, password, email, name } = req.body;
+    const { name, username, password, email } = req.body;
 
     if (!username || !password || !email || !name) {
         return res.status(400).json({ message: 'All fields are required.' });
@@ -190,16 +194,22 @@ router.post('/register', async (req, res) => {
 
 router.post('/register1', authenticateToken, async (req, res) => {
 
-    const { username, password, email, name } = req.body;
+    const { name, username, password, email } = req.body;
 
     if (!username || !password || !email || !name) {
         return res.status(400).json({ message: 'All fields are required.' });
     }
 
+    console.log(username);
+
     try {
         let isUser = await Users.findOne({
             username: username
         });
+
+        if (isUser) {
+            
+        }
 
         if (!isUser) {
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -213,7 +223,7 @@ router.post('/register1', authenticateToken, async (req, res) => {
             await user.save(); // Add new user to the database
             res.status(201).json({ message: 'User registered successfully.' });
         } else {
-            res.json({ message: 'User already exists!' })
+            res.status(409).json({ message: 'User already exists!' })
         }
     } catch ( err ) {
         res.status(500).json({ message: 'Server error. Please try again later.' });

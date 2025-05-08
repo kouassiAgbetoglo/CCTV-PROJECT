@@ -1,7 +1,7 @@
 
 
 
-POST http://localhost:5000/cam/create
+POST http://localhost:5000/cam/AddNewCamera
 Content-type: application/json
 
 {
@@ -11,4 +11,8 @@ Content-type: application/json
 
 ###
 
-POST http://localhost:5000/cam/camera/zaza
+GET http://localhost:5000/cam/test
+
+###
+
+POST http://localhost:5000/cam/getUserCams

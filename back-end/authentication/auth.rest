@@ -7,10 +7,10 @@ POST http://localhost:5000/auth/register
 Content-type: application/json
 
 {
-    "username": "admin",
-    "password": "admin",
-    "email": "admin@admmin.com",
-    "name": "admin"
+    "name": "admin1",
+    "username": "admin1",
+    "password": "admin1",
+    "email": "admin1@admmin.com"
 }
 
 ###
@@ -19,15 +19,15 @@ POST http://localhost:5000/auth/register1
 Content-type: application/json
 
 {
-    "username": "admin",
-    "password": "admin",
-    "email": "admin@admmin.com",
-    "name": "admin"
+    "username": "admin2",
+    "password": "admin2",
+    "email": "admin2@admmin.com",
+    "name": "admin2"
 }
 
 ###
 
-POST http://localhost:5000/auth/login1
+POST http://localhost:5000/auth/login
 Content-type: application/json
 
 {

@@ -5,6 +5,33 @@ const Users = require('../models/users');
 const isAuthenticated = require('../Middleware/isAuthenticated.js');
 
 
+
+const getUserId = async (username) => {
+
+  try {
+    const user = await Users.findOne(username);
+
+    if (!user) {
+      return null;
+    }
+    return user._id;
+
+  } catch (error) {
+    return error.message;
+  }
+
+}
+
+//
+
+router.get('/test', async (req, res) => {
+  if (getUserId()) {
+    console.log("test");
+  } else {
+    console.log("Failed");
+  }
+})
+
 // Delete camera
 router.post('/DeleteCamera', isAuthenticated, async (req, res) => {
   const { cameraName } = req.body;
@@ -74,6 +101,39 @@ router.post('/AddNewCamera', isAuthenticated,  async (req, res) => {
     res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 }); 
+
+router.post('/getUserCams', async (req, res) => {
+  
+  try {
+
+    const userId = await getUserId({username: "admin"});
+
+    console.log(userId);
+
+    if (!userId) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    
+
+    const cameras = await Cameras.find({"owner": userId});
+
+    console.log(`Camera list: ${cameras}`);
+
+    const cameraList = [];
+
+    if (cameras) {
+      for (const camera of cameras) {
+        cameraList.push(camera.cameraName);
+      }
+    }
+
+    console.log(`Camera List: ${cameraList}`);
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+
+})
 
 router.post('/getID', isAuthenticated, async (req, res) => {
 
