@@ -15,4 +15,4 @@ GET http://localhost:5000/cam/test
 
 ###
 
-POST http://localhost:5000/cam/getUserCams
+GET  http://localhost:5000/cam/getUserCams

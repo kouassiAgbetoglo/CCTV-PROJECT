@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Cameras = require('../models/cameras');
 const Users = require('../models/users');
-const isAuthenticated = require('../Middleware/isAuthenticated.js');
 
+
+const isAuthenticated = require('../Middleware/isAuthenticated.js');
+const authenticateToken = require('../Middleware/authToken.js');
 
 
 const getUserId = async (username) => {
@@ -102,7 +104,7 @@ router.post('/AddNewCamera', isAuthenticated,  async (req, res) => {
   }
 }); 
 
-router.post('/getUserCams', async (req, res) => {
+router.get('/getUserCams', authenticateToken, async (req, res) => {
   
   try {
 
@@ -117,17 +119,27 @@ router.post('/getUserCams', async (req, res) => {
 
     const cameras = await Cameras.find({"owner": userId});
 
-    console.log(`Camera list: ${cameras}`);
+    if (!cameras) {
+      res.status(401).json({ message: 'No camera available'});
+    }
 
     const cameraList = [];
 
-    if (cameras) {
-      for (const camera of cameras) {
-        cameraList.push(camera.cameraName);
-      }
+    for (const camera of cameras) {
+      cameraList.push({
+        name: camera.cameraName,
+        type: camera.cameraType,
+        location: camera.location,
+        status: camera.status,
+        activationDate: camera.activationDate
+      });
     }
 
-    console.log(`Camera List: ${cameraList}`);
+    console.log(654, cameraList)
+
+    res.status(201).json({
+      userCameras: cameraList
+    })
 
   } catch (error) {
     res.status(500).json({ message: 'Server error. Please try again later.' });
@@ -154,7 +166,7 @@ router.post('/getID', isAuthenticated, async (req, res) => {
       res.status(401).json({ message: 'No camera available'});
     }
 
-    return res.json({ 
+    return res.status(201).json({ 
       Cameras: cameraList,
     });
 
