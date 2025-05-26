@@ -106,11 +106,14 @@ router.post('/AddNewCamera', isAuthenticated,  async (req, res) => {
 
 router.get('/getUserCams', authenticateToken, async (req, res) => {
   
+  username = req.user;
+
+
   try {
 
-    const userId = await getUserId({username: "admin"});
+    const userId = await getUserId({username: username});
 
-    console.log(userId);
+    console.log(username, userId); 
 
     if (!userId) {
       return res.status(404).json({ message: 'User not found.' });
@@ -134,8 +137,6 @@ router.get('/getUserCams', authenticateToken, async (req, res) => {
         activationDate: camera.activationDate
       });
     }
-
-    console.log(654, cameraList)
 
     res.status(201).json({
       userCameras: cameraList

@@ -10,6 +10,10 @@ const { app, server } = InitServer(); // Creates app + HTTP server with Socket.I
 const usersRouter = require('./authentication/auth.js');
 app.use('/auth/', usersRouter);
 
+// Refreshtoke
+const refreshTokenRouter = require('./authentication/refresh.js');
+app.use('/refresh', refreshTokenRouter);
+
 // User infos modifications
 const userData = require('./authentication/resetUserInfo');
 app.use('/reset/', userData);

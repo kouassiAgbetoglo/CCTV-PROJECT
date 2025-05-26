@@ -94,12 +94,14 @@ router.post('/login1', async (req, res) => {
     if (!checkPassword) {
       return res.status(401).json({ message: 'Invalid credentials. Login failed.' });
     }
+
+    const name = isUser.name;
     
     // Create access token
-    const token = jwt.sign({ username: isUser.username }, jwtSecret, { expiresIn: "15m" }); // 15min duration
+    const token = jwt.sign({ username: username }, jwtSecret, { expiresIn: "15m" }); // 15min duration
 
     // Create refresh token
-    const refreshToken = jwt.sign({ username: isUser.username }, jwtRefreshSecret, { expiresIn: "1d" }); // 1day duration
+    const refreshToken = jwt.sign({ username: username }, jwtRefreshSecret, { expiresIn: "1d" }); // 1day duration
 
     // Update user with refresh token
     const updatedUser = await Users.findOneAndUpdate(
@@ -115,7 +117,8 @@ router.post('/login1', async (req, res) => {
 
     return res.status(200).json({ // A remplacer par 201
       token, 
-      refreshToken 
+      refreshToken,
+      name
     })
   } catch ( err ) {
     res.status(500).json({ message: 'Server error. Please try again later.' });

@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
 
-router.post('/refresh-token', async (req, res) => {
+router.post('/newToken', async (req, res) => {
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
@@ -29,7 +29,7 @@ router.post('/refresh-token', async (req, res) => {
 
         // Issue new access token
         const newAccessToken = jwt.sign(
-            { username: decoded.username }, 
+            { username: checkRefreshToken.username }, 
             jwtSecret, 
             { expiresIn: '15m' }
         );
