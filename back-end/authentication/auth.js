@@ -31,7 +31,7 @@ router.get('/secured-auth', isAuthenticated, (req, res) => {
 
 router.get('/protected-route', authenticateToken, (req, res) => {
   return res.json({ message: 'Protected data', user: req.user });
-  });
+});
 
 
 // Logout
@@ -98,7 +98,7 @@ router.post('/login1', async (req, res) => {
     const name = isUser.name;
     
     // Create access token
-    const token = jwt.sign({ username: username }, jwtSecret, { expiresIn: "15m" }); // 15min duration
+    const token = jwt.sign({ username: username }, jwtSecret, { expiresIn: "30m" }); // 15min duration
 
     // Create refresh token
     const refreshToken = jwt.sign({ username: username }, jwtRefreshSecret, { expiresIn: "1d" }); // 1day duration

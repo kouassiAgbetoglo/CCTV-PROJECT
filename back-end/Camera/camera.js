@@ -9,10 +9,10 @@ const authenticateToken = require('../Middleware/authToken.js');
 
 
 const getUserId = async (username) => {
-
+  console.log(44)
   try {
-    const user = await Users.findOne(username);
-
+    const user = await Users.findOne({ username:username });
+    console.log(user);
     if (!user) {
       return null;
     }
@@ -24,15 +24,98 @@ const getUserId = async (username) => {
 
 }
 
-//
 
-router.get('/test', async (req, res) => {
-  if (getUserId()) {
-    console.log("test");
-  } else {
-    console.log("Failed");
+router.post('/newcam', authenticateToken, async (req, res) => {
+  const { cameraName, cameraType } = req.body;
+  const username = req.user;
+  
+  if (!cameraName || !cameraType) {
+    return res.status(400).json({ message: 'Fields are missing.' });
+  }
+
+  try {
+
+    const owner = await getUserId(username);
+
+    if (!owner) {
+      return res.status(409).json({ message: "User not found. Data inconsistency detected." })
+    }
+
+    const camera = await Cameras.findOne({
+      cameraName: cameraName,
+      owner: owner
+    })
+
+    if (camera) {
+      return res.status(409).json({ message: "Camera already exists." })
+    }
+
+    const newCamera = new Cameras({
+      cameraName: cameraName,
+      cameraType: cameraType,
+      owner: owner
+    });
+
+    const addCam = await newCamera.save();
+
+    if (!addCam) {
+      return res.status(500).json({ message: "Deletion failted unexpectedly." });
+    }
+
+    return res.status(201).json({ message: "Camera created successfully." })
+  } catch (error) {
+    return res.status(500).json({ message: "Server error. Please try again later." })
   }
 })
+
+router.delete('/rm/:camName', authenticateToken, async (req,res)=>{
+  const camName = req.params.camName;
+  const username = req.user;
+
+  console.log(camName, username);
+
+  if (!camName) {
+    return res.status(400).json({message: "Camera name was not provided."});
+  }
+
+  try {
+
+    const camera = await Cameras.findOne({
+      cameraName: camName,
+    });
+
+    if (!camera) {
+      return res.status(404).json({message: "Camera not found."});
+    }
+
+    const cameraOwner = await Users.findById(camera.owner);
+
+    if (!cameraOwner) {
+      return res.status(409).json({ message: "Camera is linked to a non-existent user. Data inconsistency detected." })
+    }
+
+    if (cameraOwner.username !== username) {
+      return res.status(403).json({ message: "Action blocked. Unauthorized access attempt detected." })
+    }
+
+    const rmCam = await Cameras.findOneAndDelete({
+      cameraName: camName,
+      owner: cameraOwner._id 
+    });
+
+
+    if (!rmCam) {
+      return res.status(500).json({ message: "Deletion failted unexpectedly." });
+    }
+
+    return res.status(200).json({ message: "Camera deleted successfully!" });
+
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error. Please try again later.', error: error.message });
+  }
+})
+
+
 
 // Delete camera
 router.post('/DeleteCamera', isAuthenticated, async (req, res) => {
@@ -57,8 +140,7 @@ router.post('/DeleteCamera', isAuthenticated, async (req, res) => {
     res.status(200).json({ message: 'Camera deleted successfully.' });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
+    return res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 
 })
@@ -113,7 +195,7 @@ router.get('/getUserCams', authenticateToken, async (req, res) => {
 
     const userId = await getUserId({username: username});
 
-    console.log(username, userId); 
+    console.log(username, userId, 45); 
 
     if (!userId) {
       return res.status(404).json({ message: 'User not found.' });

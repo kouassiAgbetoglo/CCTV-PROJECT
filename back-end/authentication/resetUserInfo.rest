@@ -1,52 +1,41 @@
-POST http://localhost:5000/auth/login
+POST http://localhost:5000/auth/login1
 Content-type: application/json
 
 {
-    "username": "admin1",
-    "password": "tamere"
+    "username": "admin",
+    "password": "admin"
 }
 
-
-###
-
-POST http://localhost:5000/reset/modification-password
-Content-type: application/json
-
-{
-    "oldPassword": "admin1",
-    "newPassword": "tamere",
-    "confirmPassword": "tamere",
-    "username": "admin1"
-}
-
-###
-
-
-POST http://localhost:5000/reset/modification-email
-Content-type: application/json
-
-{
-    "email": "admin1@admmin.com",
-    "newEmail": "test1@admin.com",
-    "username": "admin1"
-}
-
-###
-
-POST http://localhost:5000/reset/modifyEmail
-Content-type: application/json
-
-{
-    "email": "admin1@admmin.com",
-    "newEmail": "test1@admin.com",
-    "username": "admin"
-}
 
 ###
 
 POST http://localhost:5000/reset/changeMail
 Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQ4NzY1MzA1LCJleHAiOjE3NDg3NjcxMDV9.gsrjbpxuEZNhlUoKwK6C8Fo5nhqW5qdEZYYNQoRpZHU
 
 {
+    "email": "adminTest@gmail.com",
+    "newEmail": "admin@gmail.com"
+}
 
+###
+
+POST http://localhost:5000/reset/changePw
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzQ4NzY1NTYzLCJleHAiOjE3NDg3NjczNjN9.aijQPNVW-B3Q2skFs6STqYbEcES3NfHguVa1G-dwi9w
+
+{
+    "confirmPassword": "admin",
+    "currentPassword": "admin1",
+    "newPassword": "admin"
+}
+
+###
+
+POST http://localhost:5000/auth/login1
+Content-type: application/json
+
+{
+    "username": "admin",
+    "password": "admin1"
 }
